@@ -2,5 +2,5 @@
 
 ## Stack
 
-- `api/` — Bun, Elysia, TypeScript, Zod, Pino
-- `web/` — Next.js, TypeScript
+- `api/` — Bun, Elysia, TypeScript, Prisma, Zod
+- `web/` — React, TypeScript
