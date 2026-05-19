@@ -9,6 +9,7 @@ export interface TreeItem {
   co2PerYear: number;
   price: number;
   image: string;
+  description?: string | null;
   tag?: string; // e.g. 'amazonia' | 'sahel' | 'andes' | 'madagascar'
   isBigImpact?: boolean;
 }
@@ -35,6 +36,10 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
         <img
           src={tree.image}
           alt={tree.name}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src =
+              'https://placehold.co/400x300/e8f5e9/134d37?text=' + encodeURIComponent(tree.commonName);
+          }}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
@@ -58,17 +63,28 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           <p className="text-xs text-gray-400 mt-0.5 italic">{tree.commonName}</p>
         </div>
 
-        {/* Meta row */}
+        {/* Region + CO2 row */}
         <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
-          <span className="flex items-center gap-1">
-            <MapPin size={11} className="text-[#134d37]" />
-            {tree.country}
-          </span>
-          <span className="flex items-center gap-1">
-            <Leaf size={11} className="text-[#134d37]" />
-            ~{tree.co2PerYear}kg/an
-          </span>
+          {tree.country && (
+            <span className="flex items-center gap-1">
+              <MapPin size={11} className="text-[#134d37]" />
+              {tree.country}
+            </span>
+          )}
+          {tree.co2PerYear > 0 && (
+            <span className="flex items-center gap-1 ml-auto">
+              <Leaf size={11} className="text-[#134d37]" />
+              ~{tree.co2PerYear}kg/an
+            </span>
+          )}
         </div>
+
+        {/* Description */}
+        {tree.description && (
+          <p className="text-xs text-gray-400 leading-snug line-clamp-2">
+            {tree.description}
+          </p>
+        )}
 
         {/* CTA */}
         <button
