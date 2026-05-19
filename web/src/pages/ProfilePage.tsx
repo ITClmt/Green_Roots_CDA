@@ -1,30 +1,17 @@
 import { Link } from 'react-router';
-import { Leaf, TreePine, Sprout, Plus } from 'lucide-react';
+import { Leaf, Plus } from 'lucide-react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
-
-// ── Types ────────────────────────────────────────────────────────────────────
-
-interface BadgeData {
-  id: string;
-  name: string;
-  description: string;
-  variant: 'green' | 'brown';
-}
-
-interface OrderData {
-  id: string;
-  treeName: string;
-  date: string;
-  location: string;
-  status: 'planted' | 'completed';
-  iconVariant: 'pine' | 'sprout' | 'leaf';
-}
+import { BadgeCard } from '../components/profile/BadgeCard';
+import { OrderItem } from '../components/profile/OrderItem';
+import type { UserProfile, BadgeData, OrderData } from '../types/profile';
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
 
-const USER = {
-  name: 'Jacky Chak',
+const USER: UserProfile = {
+  id: 'user-1',
+  firstName: 'Jacky',
+  lastName: 'Chak',
   treesPlanted: 12,
 };
 
@@ -46,68 +33,29 @@ const BADGES: BadgeData[] = [
 const ORDERS: OrderData[] = [
   {
     id: 'order-1',
-    treeName: '5 Oak Trees',
-    date: '12 oct 2023',
+    name: 'Oak Trees',
+    quantity: 5,
+    createdAt: '12 oct 2023',
     location: 'Amazon Rainforest',
-    status: 'planted',
     iconVariant: 'pine',
   },
   {
     id: 'order-2',
-    treeName: '7 Mangroves',
-    date: '04 août 2023',
+    name: 'Mangroves',
+    quantity: 7,
+    createdAt: '04 août 2023',
     location: 'Madagascar Coast',
-    status: 'planted',
     iconVariant: 'sprout',
   },
   {
     id: 'order-3',
-    treeName: 'Welcome Sapling',
-    date: '15 janv 2023',
+    name: 'Welcome Sapling',
+    quantity: 1,
+    createdAt: '15 janv 2023',
     location: 'Local Reserve',
-    status: 'completed',
     iconVariant: 'leaf',
   },
 ];
-
-const ORDER_ICONS = {
-  pine: TreePine,
-  sprout: Sprout,
-  leaf: Leaf,
-} as const;
-
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-function StatusBadge({ status }: { status: OrderData['status'] }) {
-  return status === 'planted' ? (
-    <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full bg-[#cce8d4] text-[#0f5238]">
-      Planté
-    </span>
-  ) : (
-    <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full bg-[#e8e9e4] text-[#404943]">
-      Complété
-    </span>
-  );
-}
-
-function BadgeCard({ badge }: { badge: BadgeData }) {
-  const isGreen = badge.variant === 'green';
-  const Icon = isGreen ? TreePine : Leaf;
-
-  return (
-    <div className="flex flex-col items-center gap-2 bg-white rounded-2xl p-4 text-center">
-      <div
-        className={`w-14 h-14 rounded-full flex items-center justify-center ${
-          isGreen ? 'bg-[#cce8d4]' : 'bg-[#f5dfc8]'
-        }`}
-      >
-        <Icon size={26} className={isGreen ? 'text-[#0f5238]' : 'text-[#bc6c25]'} />
-      </div>
-      <p className="text-sm font-semibold text-[#1a1c19] leading-snug">{badge.name}</p>
-      <p className="text-xs text-[#404943]">{badge.description}</p>
-    </div>
-  );
-}
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -123,7 +71,7 @@ export function ProfilePage() {
             {/* ── Left column : identity + impact + badges ── */}
             <div className="flex flex-col gap-6">
 
-              <h1 className="text-3xl font-bold text-[#1a1c19]">{USER.name}</h1>
+              <h1 className="text-3xl font-bold text-[#1a1c19]">{USER.firstName} {USER.lastName}</h1>
 
               {/* Impact card */}
               <div className="rounded-2xl bg-[#0f5238] text-white p-6">
@@ -161,28 +109,9 @@ export function ProfilePage() {
                   Historique des commandes
                 </h2>
                 <div className="flex flex-col gap-3">
-                  {ORDERS.map((order) => {
-                    const Icon = ORDER_ICONS[order.iconVariant];
-                    return (
-                      <div
-                        key={order.id}
-                        className="flex items-center gap-4 bg-[#f3f4ef] rounded-2xl px-4 py-4"
-                      >
-                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0">
-                          <Icon size={17} className="text-[#0f5238]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-[#1a1c19] leading-snug">
-                            {order.treeName}
-                          </p>
-                          <p className="text-xs text-[#404943] mt-0.5">
-                            {order.date} • {order.location}
-                          </p>
-                        </div>
-                        <StatusBadge status={order.status} />
-                      </div>
-                    );
-                  })}
+                  {ORDERS.map((order) => (
+                    <OrderItem key={order.id} order={order} />
+                  ))}
                 </div>
               </section>
 
@@ -191,7 +120,7 @@ export function ProfilePage() {
                 className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-[#0f5238] hover:bg-[#2c694e] active:bg-[#003824] text-white text-sm font-semibold transition-colors"
               >
                 <Plus size={18} />
-                Planter plus d&apos;arbres
+                Planter plus d'arbres
               </Link>
 
             </div>
