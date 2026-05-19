@@ -1,0 +1,12 @@
+CREATE TYPE "public"."role" AS ENUM('USER', 'ADMIN');--> statement-breakpoint
+CREATE TABLE "users" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"email" text NOT NULL,
+	"password" text NOT NULL,
+	"role" "role" DEFAULT 'USER' NOT NULL,
+	"first_name" text NOT NULL,
+	"last_name" text NOT NULL,
+	"created_at" timestamp (3) with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp (3) with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
+);
