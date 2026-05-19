@@ -61,7 +61,7 @@ const ORDERS: OrderData[] = [
 
 export function ProfilePage() {
   return (
-    <div className="min-h-screen bg-[#f9faf5]">
+    <div className="min-h-screen bg-surface-secondary">
       <div className="max-w-[1440px] mx-auto">
         <Header />
 
@@ -71,10 +71,12 @@ export function ProfilePage() {
             {/* ── Left column : identity + impact + badges ── */}
             <div className="flex flex-col gap-6">
 
-              <h1 className="text-3xl font-bold text-[#1a1c19]">{USER.firstName} {USER.lastName}</h1>
+              <h1 className="text-3xl font-bold text-content-primary">
+                {USER.firstName} {USER.lastName}
+              </h1>
 
               {/* Impact card */}
-              <div className="rounded-2xl bg-[#0f5238] text-white p-6">
+              <div className="rounded-2xl bg-primary text-white p-6">
                 <div className="flex items-center gap-1.5 mb-5">
                   <Leaf size={13} className="text-white/70" />
                   <span className="text-[11px] font-semibold uppercase tracking-widest text-white/70">
@@ -91,7 +93,7 @@ export function ProfilePage() {
 
               {/* Badges */}
               <section>
-                <h2 className="text-xl font-bold text-[#1a1c19] mb-4">Badges</h2>
+                <h2 className="text-xl font-bold text-content-primary mb-4">Badges</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {BADGES.map((badge) => (
                     <BadgeCard key={badge.id} badge={badge} />
@@ -105,7 +107,7 @@ export function ProfilePage() {
             <div className="flex flex-col gap-6 mt-8 md:mt-0">
 
               <section>
-                <h2 className="text-xl font-bold text-[#1a1c19] mb-4">
+                <h2 className="text-xl font-bold text-content-primary mb-4">
                   Historique des commandes
                 </h2>
                 <div className="flex flex-col gap-3">
@@ -117,7 +119,7 @@ export function ProfilePage() {
 
               <Link
                 to="/catalog"
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-[#0f5238] hover:bg-[#2c694e] active:bg-[#003824] text-white text-sm font-semibold transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold transition-colors"
               >
                 <Plus size={18} />
                 Planter plus d'arbres
