@@ -1,1 +1,0 @@
-ALTER TABLE "trees" ADD COLUMN "o2_per_year" integer DEFAULT 0 NOT NULL;

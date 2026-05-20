@@ -1,6 +1,6 @@
 {
-  "id": "cd71cebb-ac7e-4965-a466-a6a904be51a4",
-  "prevId": "daeb1eb3-dbde-4290-9523-48128647a3c2",
+  "id": "283e0ece-17f8-4857-93b5-6296d21369d9",
+  "prevId": "09d4e5a7-a14b-4bf8-9a70-f55c57003555",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -106,21 +106,21 @@
           "primaryKey": false,
           "notNull": false
         },
-        "region": {
-          "name": "region",
+        "location": {
+          "name": "location",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "co2_per_year": {
-          "name": "co2_per_year",
+        "co2": {
+          "name": "co2",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "default": 0
         },
-        "o2_per_year": {
-          "name": "o2_per_year",
+        "oxygen": {
+          "name": "oxygen",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
