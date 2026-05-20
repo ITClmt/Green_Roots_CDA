@@ -1,126 +1,6 @@
 import { useState } from 'react';
 import { CatalogueCard, type TreeItem } from './CatalogueCard';
-import treeMahogany from '../../assets/tree_mahogany.png';
-import treeBaobab from '../../assets/tree_baobab.png';
-import treeMangrove from '../../assets/tree_mangrove.png';
-
-/* ── static data ── */
-const ALL_TREES: TreeItem[] = [
-  {
-    id: 'mahogany-1',
-    name: 'Swietenia Macrophylla',
-    commonName: 'Big-leaf Mahogany',
-    region: 'amazonia',
-    country: 'Amazon Basin, Brésil',
-    co2PerYear: 25,
-    price: 12.5,
-    image: treeMahogany,
-    tag: 'amazonia',
-  },
-  {
-    id: 'baobab-1',
-    name: 'Adansonia Digitata',
-    commonName: 'African Baobab',
-    region: 'sahel',
-    country: 'Sahel Region, Sénégal',
-    co2PerYear: 40,
-    price: 18.0,
-    image: treeBaobab,
-    tag: 'sahel',
-  },
-  {
-    id: 'mangrove-1',
-    name: 'Rhizophora Mangle',
-    commonName: 'Red Mangrove',
-    region: 'madagascar',
-    country: 'Coastal Madagascar',
-    co2PerYear: 12,
-    price: 8.5,
-    image: treeMangrove,
-    tag: 'madagascar',
-    isBigImpact: true,
-  },
-  {
-    id: 'mahogany-2',
-    name: 'Swietenia Macrophylla',
-    commonName: 'Big-leaf Mahogany',
-    region: 'amazonia',
-    country: 'Amazon Basin, Brésil',
-    co2PerYear: 25,
-    price: 12.5,
-    image: treeMahogany,
-    tag: 'amazonia',
-  },
-  {
-    id: 'baobab-2',
-    name: 'Adansonia Digitata',
-    commonName: 'African Baobab',
-    region: 'sahel',
-    country: 'Sahel Region, Sénégal',
-    co2PerYear: 40,
-    price: 18.0,
-    image: treeBaobab,
-    tag: 'sahel',
-  },
-  {
-    id: 'mangrove-2',
-    name: 'Rhizophora Mangle',
-    commonName: 'Red Mangrove',
-    region: 'madagascar',
-    country: 'Coastal Madagascar',
-    co2PerYear: 12,
-    price: 8.5,
-    image: treeMangrove,
-    tag: 'madagascar',
-    isBigImpact: true,
-  },
-  {
-    id: 'mahogany-3',
-    name: 'Swietenia Macrophylla',
-    commonName: 'Big-leaf Mahogany',
-    region: 'amazonia',
-    country: 'Amazon Basin, Brésil',
-    co2PerYear: 25,
-    price: 12.5,
-    image: treeMahogany,
-    tag: 'amazonia',
-  },
-  {
-    id: 'baobab-3',
-    name: 'Adansonia Digitata',
-    commonName: 'African Baobab',
-    region: 'sahel',
-    country: 'Sahel Region, Sénégal',
-    co2PerYear: 40,
-    price: 18.0,
-    image: treeBaobab,
-    tag: 'sahel',
-  },
-  {
-    id: 'mangrove-3',
-    name: 'Rhizophora Mangle',
-    commonName: 'Red Mangrove',
-    region: 'madagascar',
-    country: 'Coastal Madagascar',
-    co2PerYear: 12,
-    price: 8.5,
-    image: treeMangrove,
-    tag: 'madagascar',
-    isBigImpact: true,
-  },
-  {
-    id: 'mangrove-3',
-    name: 'Rhizophora Mangle',
-    commonName: 'Red Mangrove',
-    region: 'madagascar',
-    country: 'Coastal Madagascar',
-    co2PerYear: 12,
-    price: 8.5,
-    image: treeMangrove,
-    tag: 'madagascar',
-    isBigImpact: true,
-  },
-];
+import { useTrees } from '../../hooks/useTrees';
 
 const PAGE_SIZE = 9;
 
@@ -131,16 +11,48 @@ interface CatalogueGridProps {
 
 export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const { data: trees, isLoading, error } = useTrees();
+
+  /* Loading state */
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-24 text-gray-400 text-sm">
+        Chargement du catalogue...
+      </div>
+    );
+  }
+
+  /* Error state */
+  if (error) {
+    return (
+      <div className="flex justify-center items-center py-24 text-red-400 text-sm">
+        Erreur : {error.message}
+      </div>
+    );
+  }
+
+  /* Map API Tree → TreeItem (shape expected by CatalogueCard) */
+  const allTrees: TreeItem[] = (trees ?? []).map((tree) => ({
+    id: tree.id,
+    name: tree.species,
+    commonName: tree.name,
+    description: tree.description,
+    region: tree.region ?? '',
+    country: tree.region ?? '',
+    co2PerYear: tree.co2PerYear,
+    price: parseFloat(tree.price),
+    image: tree.imageUrl ?? '',
+    tag: 'all',
+  }));
 
   /* Filter trees */
-  const filtered = ALL_TREES.filter((tree) => {
+  const filtered = allTrees.filter((tree) => {
     const matchesTag = activeTag === 'all' || tree.tag === activeTag;
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||
       tree.name.toLowerCase().includes(q) ||
-      tree.commonName.toLowerCase().includes(q) ||
-      tree.country.toLowerCase().includes(q);
+      tree.commonName.toLowerCase().includes(q);
     return matchesTag && matchesSearch;
   });
 

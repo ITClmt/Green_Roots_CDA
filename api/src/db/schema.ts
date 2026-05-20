@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, uuid, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, pgEnum, uuid, text, timestamp, integer, numeric } from "drizzle-orm/pg-core";
 import { timestamps } from "./helpers";
 
 export const roleEnum = pgEnum("role", ["USER", "ADMIN"]);
@@ -22,4 +22,17 @@ export const refreshTokens = pgTable("refresh_tokens", {
   expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
   rotatedAt: timestamp("rotated_at", { mode: "date", withTimezone: true }),
   createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).notNull().defaultNow(),
+});
+
+export const trees = pgTable("trees", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  species: text("species").notNull(),
+  description: text("description"),
+  region: text("region"),
+  co2PerYear: integer("co2_per_year").notNull().default(0),
+  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  imageUrl: text("image_url"),
+  stock: integer("stock").notNull().default(0),
+  ...timestamps,
 });
