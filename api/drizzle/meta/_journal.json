@@ -29,6 +29,13 @@
       "when": 1779270084712,
       "tag": "0003_careful_piledriver",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1779286522131,
+      "tag": "0004_jazzy_excalibur",
+      "breakpoints": true
     }
   ]
 }
