@@ -1,5 +1,5 @@
 import type { Tree, ApiResponse } from "../types/tree";
-
+import { API_BASE_URL } from "../utils/constant";
 const API_BASE = "http://localhost:3000/api/v1";
 
 export async function fetchTrees(): Promise<Tree[]> {
