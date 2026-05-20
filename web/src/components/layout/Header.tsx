@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { Link, NavLink } from 'react-router';
+import { useAuth } from '../../features/auth/AuthContext';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <header className=" sticky top-0 z-50 bg-[#F9FAF5] ">
@@ -66,18 +68,41 @@ export function Header() {
           >
             Catalog
           </NavLink>
-          <NavLink
-            to="/profil"
-            className={({ isActive }) =>
-              `text-sm font-medium transition-colors ${
-                isActive
-                  ? "text-[#134d37] border-b-2 border-[#134d37]"
-                  : "text-gray-500 hover:text-[#134d37]"
-              }`
-            }
-          >
-            Profil
-          </NavLink>
+          {user ? (
+            <>
+              <NavLink
+                to="/profil"
+                className={({ isActive }) =>
+                  `text-sm font-medium transition-colors ${
+                    isActive
+                      ? "text-[#134d37] border-b-2 border-[#134d37]"
+                      : "text-gray-500 hover:text-[#134d37]"
+                  }`
+                }
+              >
+                Profil
+              </NavLink>
+              <button
+                onClick={() => logout()}
+                className="text-sm font-medium text-gray-500 hover:text-[#134d37] transition-colors"
+              >
+                Déconnexion
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/register"
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-[#134d37] border-b-2 border-[#134d37]"
+                    : "text-gray-500 hover:text-[#134d37]"
+                }`
+              }
+            >
+              Créer un compte
+            </NavLink>
+          )}
         </nav>
 
         {/* Cart - right */}
@@ -111,19 +136,39 @@ export function Header() {
         >
           Catalog
         </NavLink>
-        <NavLink
-          to="/profil"
-          onClick={() => setMenuOpen(false)}
-          className={({ isActive }) =>
-            `font-medium text-sm py-3 transition-colors ${
-              isActive
-                ? "text-[#134d37] font-semibold"
-                : "text-gray-500 hover:text-[#134d37]"
-            }`
-          }
-        >
-          Profil
-        </NavLink>
+        {user ? (
+          <>
+            <NavLink
+              to="/profil"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `font-medium text-sm py-3 border-b border-gray-100 transition-colors ${
+                  isActive ? "text-[#134d37] font-semibold" : "text-gray-500 hover:text-[#134d37]"
+                }`
+              }
+            >
+              Profil
+            </NavLink>
+            <button
+              onClick={() => { logout(); setMenuOpen(false); }}
+              className="font-medium text-sm py-3 text-left text-gray-500 hover:text-[#134d37] transition-colors"
+            >
+              Déconnexion
+            </button>
+          </>
+        ) : (
+          <NavLink
+            to="/register"
+            onClick={() => setMenuOpen(false)}
+            className={({ isActive }) =>
+              `font-medium text-sm py-3 transition-colors ${
+                isActive ? "text-[#134d37] font-semibold" : "text-gray-500 hover:text-[#134d37]"
+              }`
+            }
+          >
+            Créer un compte
+          </NavLink>
+        )}
       </nav>
     </header>
   );
