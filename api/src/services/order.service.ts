@@ -1,7 +1,7 @@
 import { db } from "@/db/client";
 import { orders, orderItems, trees } from "@/db/schema";
 import type { CheckoutDto } from "@/models/order";
-import { AppError, NotFoundError,ConflictError } from "@/utils/errors";
+import { AppError, NotFoundError,ConflictError,INTERNAL_ERROR } from "@/utils/errors";
 import { eq, sql } from "drizzle-orm";
 
 export const orderService = {
@@ -31,7 +31,7 @@ export const orderService = {
             status: "PAID",
           })
           .returning({ id: orders.id });
-        if (!order) throw new AppError(500, "INTERNAL_ERROR", "Échec de la création de la commande");
+        if (!order) throw new INTERNAL_ERROR("Échec de la création de la commande");
 
         for (const item of items) {
           const [tree] = await tx
