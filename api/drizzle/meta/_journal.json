@@ -36,6 +36,13 @@
       "when": 1779288386802,
       "tag": "0004_rename_trees_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1779351872886,
+      "tag": "0005_omniscient_the_leader",
+      "breakpoints": true
     }
   ]
 }
