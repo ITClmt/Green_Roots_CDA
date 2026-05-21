@@ -1,4 +1,3 @@
-/**todo: add order controller */
 import Elysia from "elysia";
 import { requireAuth } from "@/middlewares/auth.middleware";
 import { orderService } from "@/services/order.service";
