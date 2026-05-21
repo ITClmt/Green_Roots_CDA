@@ -1,0 +1,24 @@
+meta {
+  name: checkout insufficient stock
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  [
+    {
+      "tree_id": "21e0eaca-9a78-4a74-8ad4-f4275d87c724",
+      "quantity": 666
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+meta {
+  name: checkout
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  [
+    {
+      "tree_id": "c5d283b1-ab0d-4c9b-a15a-a7f5988d06b0",
+      "quantity": 2
+    }
+  ]
+}
