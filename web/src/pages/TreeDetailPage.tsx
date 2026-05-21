@@ -1,4 +1,4 @@
-import { ArrowLeft, Euro, Leaf, MapPin, Package, Wind } from "lucide-react";
+import { ArrowLeft, Leaf, MapPin, Package, Wind } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { Footer } from "../components/layout/Footer";
 import { Header } from "../components/layout/Header";
