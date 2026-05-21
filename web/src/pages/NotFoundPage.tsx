@@ -15,7 +15,7 @@ export function NotFoundPage() {
           <img
             src="/404.png"
             alt="404"
-            className="mx-auto -mt-8 sm:-mt-12 md:-mt-16 mb-8 w-56 sm:w-72 md:w-80"
+            className="mx-auto -mt-8 sm:-mt-12 md:-mt-16 mb-8 w-72 sm:w-96 md:w-md"
           />
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-content-primary mb-4">
