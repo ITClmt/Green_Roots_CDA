@@ -1,4 +1,5 @@
-import { MapPin, Leaf } from 'lucide-react';
+import { MapPin, Leaf, Wind } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 export interface TreeItem {
   id: string;
@@ -7,10 +8,11 @@ export interface TreeItem {
   region: string;
   country: string;
   co2PerYear: number;
+  oxygen: number;
   price: number;
   image: string;
   description?: string | null;
-  tag?: string; // e.g. 'amazonia' | 'sahel' | 'andes' | 'madagascar'
+  tag?: string;
   isBigImpact?: boolean;
 }
 
@@ -20,6 +22,12 @@ interface CatalogueCardProps {
 }
 
 export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
+  const navigate = useNavigate();
+
+  const handleDetails = () => {
+    onDetails?.(tree);
+    navigate(`/catalog/${tree.id}`);
+  };
   return (
     <article
       id={`card-${tree.id}`}
@@ -63,7 +71,7 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           <p className="text-xs text-gray-400 mt-0.5 italic">{tree.commonName}</p>
         </div>
 
-        {/* Region + CO2 row */}
+        {/* Location + CO2 + Oxygen row */}
         <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
           {tree.country && (
             <span className="flex items-center gap-1">
@@ -71,12 +79,20 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
               {tree.country}
             </span>
           )}
-          {tree.co2PerYear > 0 && (
-            <span className="flex items-center gap-1 ml-auto">
-              <Leaf size={11} className="text-[#134d37]" />
-              ~{tree.co2PerYear}kg/an
-            </span>
-          )}
+          <span className="flex items-center gap-2 ml-auto">
+            {tree.co2PerYear > 0 && (
+              <span className="flex items-center gap-1">
+                <Leaf size={11} className="text-[#134d37]" />
+                ~{tree.co2PerYear}kg CO₂
+              </span>
+            )}
+            {tree.oxygen > 0 && (
+              <span className="flex items-center gap-1">
+                <Wind size={11} className="text-blue-400" />
+                {tree.oxygen}kg O₂
+              </span>
+            )}
+          </span>
         </div>
 
         {/* Description */}
@@ -89,7 +105,7 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
         {/* CTA */}
         <button
           id={`details-btn-${tree.id}`}
-          onClick={() => onDetails?.(tree)}
+          onClick={handleDetails}
           className="
             mt-auto w-full py-2.5
             bg-[#f3f4f1] hover:bg-[#e9ebe5]
