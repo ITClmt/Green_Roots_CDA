@@ -9,10 +9,30 @@ import { ForbiddenError } from "@/utils/errors";
 const uuidParam = t.Object({ id: t.String({ format: "uuid" }) });
 
 export const treesController = new Elysia({ prefix: `${API_BASE}/trees` })
-  .get("/", async () => {
-    const trees = await treesService.findAll();
-    return ok(trees);
-  })
+  .get(
+    "/",
+    async ({ query }) => {
+      const result = await treesService.findAll({
+        page: Number(query.page),
+        limit: Number(query.limit),
+        sortBy: query.sortBy,
+        sortOrder: query.sortOrder ?? "asc",
+      });
+      return ok(result);
+    },
+    {
+      query: t.Object({
+        page: t.Numeric({ default: 1, minimum: 1 }),
+        limit: t.Numeric({ default: 10, minimum: 1, maximum: 100 }),
+        sortBy: t.Optional(
+          t.Union([t.Literal("species"), t.Literal("location"), t.Literal("price"), t.Literal("stock")]),
+        ),
+        sortOrder: t.Optional(
+          t.Union([t.Literal("asc"), t.Literal("desc")], { default: "asc" }),
+        ),
+      }),
+    },
+  )
 
   .get(
     "/:id",

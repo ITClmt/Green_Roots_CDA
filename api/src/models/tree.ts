@@ -16,3 +16,10 @@ export const updateTreeSchema = createTreeSchema.partial();
 
 export type CreateTreeDto = z.infer<typeof createTreeSchema>;
 export type UpdateTreeDto = z.infer<typeof updateTreeSchema>;
+
+export type FindAllTreesDto = {
+  page: number;
+  limit: number;
+  sortBy?: "species" | "location" | "price" | "stock";
+  sortOrder: "asc" | "desc";
+};

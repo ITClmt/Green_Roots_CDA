@@ -1,11 +1,34 @@
 import { db } from "@/db/client";
 import { trees } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import type { CreateTreeDto, UpdateTreeDto } from "@/models/tree";
+import { asc, count, desc, eq } from "drizzle-orm";
+import type {
+  CreateTreeDto,
+  FindAllTreesDto,
+  UpdateTreeDto,
+} from "@/models/tree";
 
 export const treesService = {
-  async findAll() {
-    return db.select().from(trees);
+  async findAll({ page, limit, sortBy, sortOrder }: FindAllTreesDto) {
+    const offset = (page - 1) * limit;
+    const orderColumn = sortBy ? trees[sortBy] : trees.createdAt;
+    const order = sortOrder === "desc" ? desc(orderColumn) : asc(orderColumn);
+
+    const [[countResult], data] = await Promise.all([
+      db.select({ total: count() }).from(trees),
+      db.select().from(trees).orderBy(order).limit(limit).offset(offset),
+    ]);
+
+    const total = countResult?.total ?? 0;
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   },
 
   async findById(id: string) {
