@@ -1,7 +1,7 @@
 import { db } from "@/db/client";
 import { orders, orderItems, trees } from "@/db/schema";
 import type { CheckoutDto } from "@/models/order";
-import { AppError, NotFoundError,ConflictError,INTERNAL_ERROR } from "@/utils/errors";
+import {NotFoundError,ConflictError,INTERNAL_ERROR } from "@/utils/errors";
 import { eq, sql } from "drizzle-orm";
 
 export const orderService = {
