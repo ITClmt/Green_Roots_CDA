@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router";
+import { usePageTitle } from "../hooks/usePageTitle";
 import {
   Header,
   Hero,
@@ -11,6 +12,8 @@ import { ProfilePage } from "../pages/ProfilePage";
 import { CartPage } from "../pages/CartPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { LoginPage } from "../pages/LoginPage";
+import { TreeDetailPage } from "../pages/TreeDetailPage";
+import { ScrollToTop } from "../components/shared/ScrollToTop";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
 
 function Home() {
@@ -34,14 +37,20 @@ function Home() {
 }
 
 export default function App() {
+  usePageTitle();
+
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route index element={<Home />} />
       <Route path="/catalog" element={<CataloguePage />} />
+      <Route path="/catalog/:id" element={<TreeDetailPage />} />
       <Route path="/profil" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
     </Routes>
+    </>
   );
 }

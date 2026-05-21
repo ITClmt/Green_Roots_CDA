@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { CatalogueCard, type TreeItem } from './CatalogueCard';
 import { useTrees } from '../../hooks/useTrees';
+import { CatalogueTagFilter } from './CatalogueTagFilter';
 
 const PAGE_SIZE = 9;
 
 interface CatalogueGridProps {
   searchQuery: string;
   activeTag: string;
+  onTagChange: (tag: string) => void;
 }
 
-export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
+export function CatalogueGrid({ searchQuery, activeTag, onTagChange }: CatalogueGridProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const { data: trees, isLoading, error } = useTrees();
 
@@ -37,17 +39,26 @@ export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
     name: tree.species,
     commonName: tree.name,
     description: tree.description,
-    region: tree.region ?? '',
-    country: tree.region ?? '',
-    co2PerYear: tree.co2PerYear,
+    region: tree.location ?? '',
+    country: tree.location ?? '',
+    co2PerYear: tree.co2,
+    oxygen: tree.oxygen,
     price: parseFloat(tree.price),
     image: tree.imageUrl ?? '',
-    tag: 'all',
+    tag: tree.location ?? '',
   }));
+
+  /* Build dynamic location tags from actual data */
+  const locationTags = [
+    { id: 'all', label: 'Toutes les régions' },
+    ...Array.from(new Set(allTrees.map((t) => t.country).filter(Boolean))).map(
+      (loc) => ({ id: loc, label: loc })
+    ),
+  ];
 
   /* Filter trees */
   const filtered = allTrees.filter((tree) => {
-    const matchesTag = activeTag === 'all' || tree.tag === activeTag;
+    const matchesTag = activeTag === 'all' || tree.country === activeTag;
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||
@@ -61,6 +72,13 @@ export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
 
   return (
     <section id="catalogue-grid">
+      <div className="mb-8">
+        <CatalogueTagFilter
+          tags={locationTags}
+          activeTag={activeTag}
+          onTagChange={onTagChange}
+        />
+      </div>
       {filtered.length === 0 ? (
         <div className="text-center py-20 text-gray-400 text-sm">
           Aucun arbre ne correspond à votre recherche.

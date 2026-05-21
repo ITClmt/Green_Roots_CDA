@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { CatalogueSearchBar } from '../components/catalogue/CatalogueSearchBar';
-import { CatalogueTagFilter } from '../components/catalogue/CatalogueTagFilter';
 import { CatalogueGrid } from '../components/catalogue/CatalogueGrid';
 
 export function CataloguePage() {
@@ -16,10 +15,9 @@ export function CataloguePage() {
 
         <main className="px-5 sm:px-10 md:px-16 py-8 md:py-12">
 
-          {/* ── Search + Tags ── */}
-          <div className="mb-8 space-y-4">
+          {/* ── Search ── */}
+          <div className="mb-4">
             <CatalogueSearchBar value={search} onChange={setSearch} />
-            <CatalogueTagFilter activeTag={activeTag} onTagChange={setActiveTag} />
           </div>
 
           {/* ── Section header ── */}
@@ -28,8 +26,12 @@ export function CataloguePage() {
             <p className="text-sm text-gray-500 mt-1">Découvrez notre catalogue d'arbres</p>
           </div>
 
-          {/* ── Grid ── */}
-          <CatalogueGrid searchQuery={search} activeTag={activeTag} />
+          {/* ── Grid (includes tag filter driven by real API data) ── */}
+          <CatalogueGrid
+            searchQuery={search}
+            activeTag={activeTag}
+            onTagChange={setActiveTag}
+          />
         </main>
 
         <Footer />

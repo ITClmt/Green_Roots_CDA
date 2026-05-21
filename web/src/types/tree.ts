@@ -3,8 +3,9 @@ export interface Tree {
   name: string;
   species: string;
   description: string | null;
-  region: string | null;
-  co2PerYear: number;
+  location: string | null;
+  co2: number;
+  oxygen: number;
   price: string;
   imageUrl: string | null;
   stock: number;

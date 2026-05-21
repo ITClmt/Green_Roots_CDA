@@ -1,17 +1,15 @@
-export const CATALOGUE_TAGS = [
-  { id: 'all', label: 'Toutes les régions' },
-  { id: 'amazonia', label: 'Amazonia' },
-  { id: 'sahel', label: 'Sahel' },
-  { id: 'andes', label: 'Andes' },
-  { id: 'madagascar', label: 'Madagascar' },
-];
+interface Tag {
+  id: string;
+  label: string;
+}
 
 interface CatalogueTagFilterProps {
+  tags: Tag[];
   activeTag: string;
   onTagChange: (tagId: string) => void;
 }
 
-export function CatalogueTagFilter({ activeTag, onTagChange }: CatalogueTagFilterProps) {
+export function CatalogueTagFilter({ tags, activeTag, onTagChange }: CatalogueTagFilterProps) {
   return (
     <div
       id="catalogue-tag-filter"
@@ -19,7 +17,7 @@ export function CatalogueTagFilter({ activeTag, onTagChange }: CatalogueTagFilte
       role="group"
       aria-label="Filtrer par région"
     >
-      {CATALOGUE_TAGS.map((tag) => {
+      {tags.map((tag) => {
         const isActive = activeTag === tag.id;
         return (
           <button

@@ -16,3 +16,19 @@ export async function fetchTrees(): Promise<Tree[]> {
 
   return json.data;
 }
+
+export async function fetchTreeById(id: string): Promise<Tree> {
+  const response = await fetch(`${API_BASE_URL}/trees/${id}`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch tree: ${response.statusText}`);
+  }
+
+  const json: ApiResponse<Tree> = await response.json();
+
+  if (!json.success || !json.data) {
+    throw new Error(json.error ?? "Unknown error");
+  }
+
+  return json.data;
+}
