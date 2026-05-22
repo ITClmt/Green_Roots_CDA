@@ -33,7 +33,7 @@ export class ConflictError extends AppError {
     super(409, "CONFLICT", message);
   }
 }
-export class INTERNAL_ERROR extends AppError {
+export class InternalError extends AppError {
   constructor(message = "Internal Server Error") {
     super(500, "INTERNAL_ERROR", message);
   }

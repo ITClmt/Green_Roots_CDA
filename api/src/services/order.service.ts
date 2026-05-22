@@ -1,32 +1,43 @@
 import { db } from "@/db/client";
 import { orders, orderItems, trees } from "@/db/schema";
 import type { CheckoutDto } from "@/models/order";
-import { NotFoundError, ConflictError, INTERNAL_ERROR } from "@/utils/errors";
-import { eq, sql, inArray } from "drizzle-orm";
+import { NotFoundError, ConflictError, InternalError } from "@/utils/errors";
+import { sql, inArray } from "drizzle-orm";
+
+type Tree = typeof trees.$inferSelect;
+
+function validateAndComputeTotal(items: CheckoutDto, treeMap: Map<string, Tree>): number {
+  return items.reduce((total, item) => {
+    const tree = treeMap.get(item.tree_id);
+    if (!tree) throw new NotFoundError(`Tree ${item.tree_id}`);
+    if (tree.stock < item.quantity) throw new ConflictError(`Stock insuffisant pour "${tree.name}"`);
+    return total + parseFloat(tree.price) * item.quantity;
+  }, 0);
+}
+
+function buildBatchStockUpdate(items: CheckoutDto) {
+  return sql`CASE ${sql.join(
+    items.map(item => sql`WHEN id = ${item.tree_id} THEN stock - ${item.quantity}`),
+    sql` `
+  )} ELSE stock END`;
+}
 
 export const orderService = {
   async checkout(userId: string, items: CheckoutDto): Promise<{ orderId: string }> {
-    return await db.transaction(async (tx) => {
-
+    return db.transaction(async (tx) => {
+      
       const treeIds = items.map(item => item.tree_id);
+
       const fetchedTrees = await tx.select().from(trees).where(inArray(trees.id, treeIds));
       const treeMap = new Map(fetchedTrees.map(tree => [tree.id, tree]));
-
-      let totalAmount = 0;
-      for (const item of items) {
-        const tree = treeMap.get(item.tree_id);
-        if (!tree) throw new NotFoundError(`Tree ${item.tree_id}`);
-        if (tree.stock < item.quantity) {
-          throw new ConflictError(`Stock insuffisant pour l'arbre "${tree.name}"`);
-        }
-        totalAmount += parseFloat(tree.price) * item.quantity;
-      }
+      const totalAmount = validateAndComputeTotal(items, treeMap);
 
       const [order] = await tx
         .insert(orders)
         .values({ userId, totalAmount: totalAmount.toFixed(2), status: "PAID" })
         .returning({ id: orders.id });
-      if (!order) throw new INTERNAL_ERROR("Échec de la création de la commande");
+
+      if (!order) throw new InternalError("Échec de la création de la commande");
 
       await tx.insert(orderItems).values(
         items.map(item => ({
@@ -37,12 +48,10 @@ export const orderService = {
         }))
       );
 
-      for (const item of items) {
-        await tx
-          .update(trees)
-          .set({ stock: sql`${trees.stock} - ${item.quantity}` })
-          .where(eq(trees.id, item.tree_id));
-      }
+      await tx
+        .update(trees)
+        .set({ stock: buildBatchStockUpdate(items) })
+        .where(inArray(trees.id, treeIds));
 
       return { orderId: order.id };
     });
