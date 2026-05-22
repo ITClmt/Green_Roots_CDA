@@ -1,4 +1,5 @@
-import { MapPin, Leaf } from "lucide-react";
+import { MapPin, Leaf, Wind } from "lucide-react";
+import { useNavigate } from "react-router";
 
 export interface TreeItem {
   id: string;
@@ -18,6 +19,13 @@ interface CatalogueCardProps {
 }
 
 export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
+  const navigate = useNavigate();
+
+  const handleDetails = () => {
+    onDetails?.(tree);
+    navigate(`/catalog/${tree.id}`);
+  };
+
   return (
     <article
       id={`card-${tree.id}`}
@@ -46,7 +54,6 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-[#1a2f24] text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
           {tree.price.toFixed(2)}€
         </div>
-
       </div>
 
       {/* Body */}
@@ -60,7 +67,7 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           </p>
         </div>
 
-        {/* Location + CO2 row */}
+        {/* Location + CO2 + Oxygen row */}
         <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
           {tree.location && (
             <span className="flex items-center gap-1">
@@ -68,12 +75,19 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
               {tree.location}
             </span>
           )}
-          {tree.co2 > 0 && (
-            <span className="flex items-center gap-1 ml-auto">
-              <Leaf size={11} className="text-[#134d37]" />~{tree.co2}
-              kg/an
-            </span>
-          )}
+          <span className="flex items-center gap-2 ml-auto">
+            {tree.co2 > 0 && (
+              <span className="flex items-center gap-1">
+                <Leaf size={11} className="text-[#134d37]" />~{tree.co2}kg CO₂
+              </span>
+            )}
+            {tree.oxygen > 0 && (
+              <span className="flex items-center gap-1">
+                <Wind size={11} className="text-blue-400" />
+                {tree.oxygen}kg O₂
+              </span>
+            )}
+          </span>
         </div>
 
         {/* Description */}
@@ -86,7 +100,7 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
         {/* CTA */}
         <button
           id={`details-btn-${tree.id}`}
-          onClick={() => onDetails?.(tree)}
+          onClick={handleDetails}
           className="
             mt-auto w-full py-2.5
             bg-[#f3f4f1] hover:bg-[#e9ebe5]

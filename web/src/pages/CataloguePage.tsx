@@ -18,8 +18,12 @@ export function CataloguePage() {
           </div>
 
           <div className="mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold text-[#1a2f24]">Catalogue</h1>
-            <p className="text-sm text-gray-500 mt-1">Découvrez notre catalogue d'arbres</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-[#1a2f24]">
+              Catalogue
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Découvrez notre catalogue d'arbres
+            </p>
           </div>
 
           <CatalogueGrid searchQuery={search} />

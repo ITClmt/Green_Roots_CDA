@@ -53,8 +53,10 @@ export function RegisterPage() {
     }`;
 
   return (
-    <div className="min-h-screen bg-surface-secondary flex flex-col">
-      <Header />
+    <div className="min-h-screen bg-[#f9faf7] font-sans flex flex-col">
+      <div className="max-w-[1440px] mx-auto w-full">
+        <Header />
+      </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
         <div className="w-full max-w-md bg-white rounded-[24px] shadow-sm p-8">
@@ -150,7 +152,9 @@ export function RegisterPage() {
         </div>
       </div>
 
-      <Footer />
+      <div className="max-w-[1440px] mx-auto w-full">
+        <Footer />
+      </div>
     </div>
   );
 }

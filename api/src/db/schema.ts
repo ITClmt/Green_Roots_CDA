@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, uuid, text, timestamp, integer, numeric } from "drizzle-orm/pg-core";
+import { pgTable, pgEnum, uuid, text, timestamp, integer, numeric, decimal } from "drizzle-orm/pg-core";
 import { timestamps } from "./helpers";
 
 export const roleEnum = pgEnum("role", ["USER", "ADMIN"]);
@@ -35,5 +35,30 @@ export const trees = pgTable("trees", {
   price: numeric("price", { precision: 10, scale: 2, mode: "number" }).notNull(),
   imageUrl: text("image_url"),
   stock: integer("stock").notNull().default(0),
+  ...timestamps,
+});
+
+export const status = pgEnum("status", ["PENDING", "PAID", "CANCELLED"]);
+
+export const orders = pgTable("orders", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  totalAmount: decimal("total_amount") .notNull(),
+  status: status("status").notNull().default("PENDING"),
+  ...timestamps,
+});
+
+export const orderItems = pgTable("order_items", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  orderId: uuid("order_id")
+    .notNull()
+    .references(() => orders.id, { onDelete: "cascade" }),
+  treeId: uuid("tree_id")
+    .notNull()
+    .references(() => trees.id, { onDelete: "cascade" }),
+  quantity: integer("quantity").notNull(),
+  unitPrice: decimal("unit_price").notNull(),
   ...timestamps,
 });
