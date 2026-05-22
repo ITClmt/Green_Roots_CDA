@@ -40,7 +40,7 @@ export function TreeDetailPage() {
     );
   }
 
-  const price = parseFloat(tree.price);
+  const price = tree.price;
 
   return (
     <div className="min-h-screen bg-[#f9faf7] font-sans">
