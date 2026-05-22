@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { CatalogueCard, type TreeItem } from './CatalogueCard';
-import { useTrees } from '../../hooks/useTrees';
+import { useState } from "react";
+import { CatalogueCard, type TreeItem } from "./CatalogueCard";
+import { useTrees } from "../../hooks/useTrees";
+import type { Tree } from "../../types/tree";
 
 const PAGE_SIZE = 9;
 
@@ -11,7 +12,8 @@ interface CatalogueGridProps {
 
 export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const { data: trees, isLoading, error } = useTrees();
+  const { data: paginatedTrees, isLoading, error } = useTrees();
+  const trees: Tree[] = paginatedTrees?.data ?? [];
 
   /* Loading state */
   if (isLoading) {
@@ -32,22 +34,22 @@ export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
   }
 
   /* Map API Tree → TreeItem (shape expected by CatalogueCard) */
-  const allTrees: TreeItem[] = (trees ?? []).map((tree) => ({
+  const allTrees: TreeItem[] = trees.map((tree) => ({
     id: tree.id,
     name: tree.species,
     commonName: tree.name,
     description: tree.description,
-    region: tree.region ?? '',
-    country: tree.region ?? '',
-    co2PerYear: tree.co2PerYear,
-    price: parseFloat(tree.price),
-    image: tree.imageUrl ?? '',
-    tag: 'all',
+    region: tree.location ?? "",
+    country: tree.location ?? "",
+    co2PerYear: tree.co2,
+    price: tree.price,
+    image: tree.imageUrl ?? "",
+    tag: "all",
   }));
 
   /* Filter trees */
   const filtered = allTrees.filter((tree) => {
-    const matchesTag = activeTag === 'all' || tree.tag === activeTag;
+    const matchesTag = activeTag === "all" || tree.tag === activeTag;
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||

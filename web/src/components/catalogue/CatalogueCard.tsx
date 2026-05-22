@@ -1,4 +1,4 @@
-import { MapPin, Leaf } from 'lucide-react';
+import { MapPin, Leaf } from "lucide-react";
 
 export interface TreeItem {
   id: string;
@@ -32,13 +32,14 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
       "
     >
       {/* Image */}
-      <div className="relative h-48 sm:h-52 overflow-hidden flex-shrink-0">
+      <div className="relative h-48 sm:h-52 overflow-hidden shrink-0">
         <img
           src={tree.image}
           alt={tree.name}
           onError={(e) => {
             (e.target as HTMLImageElement).src =
-              'https://placehold.co/400x300/e8f5e9/134d37?text=' + encodeURIComponent(tree.commonName);
+              "https://placehold.co/400x300/e8f5e9/134d37?text=" +
+              encodeURIComponent(tree.commonName);
           }}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -59,8 +60,12 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
       {/* Body */}
       <div className="p-4 flex flex-col flex-1 gap-2">
         <div>
-          <h3 className="text-base font-bold text-[#1a2f24] leading-tight">{tree.name}</h3>
-          <p className="text-xs text-gray-400 mt-0.5 italic">{tree.commonName}</p>
+          <h3 className="text-base font-bold text-[#1a2f24] leading-tight">
+            {tree.name}
+          </h3>
+          <p className="text-xs text-gray-400 mt-0.5 italic">
+            {tree.commonName}
+          </p>
         </div>
 
         {/* Region + CO2 row */}
@@ -73,8 +78,8 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           )}
           {tree.co2PerYear > 0 && (
             <span className="flex items-center gap-1 ml-auto">
-              <Leaf size={11} className="text-[#134d37]" />
-              ~{tree.co2PerYear}kg/an
+              <Leaf size={11} className="text-[#134d37]" />~{tree.co2PerYear}
+              kg/an
             </span>
           )}
         </div>

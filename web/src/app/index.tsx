@@ -11,7 +11,9 @@ import { ProfilePage } from "../pages/ProfilePage";
 import { CartPage } from "../pages/CartPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { LoginPage } from "../pages/LoginPage";
+import { AdminTreesPage } from "../pages/AdminTreesPage";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
+import { AdminRoute } from "../features/auth/AdminRoute";
 
 function Home() {
   return (
@@ -42,6 +44,14 @@ export default function App() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/admin/trees"
+        element={
+          <AdminRoute>
+            <AdminTreesPage />
+          </AdminRoute>
+        }
+      />
     </Routes>
   );
 }
