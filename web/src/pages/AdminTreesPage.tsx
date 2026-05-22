@@ -4,6 +4,7 @@ import { Footer } from "../components/layout/Footer";
 import { TreeStockSection } from "../components/admin/TreeStockSection";
 import { TreeFormSection } from "../components/admin/TreeFormSection";
 import { useTrees } from "../hooks/useTrees";
+import { useDeleteTree } from "../hooks/useTreeMutations";
 import type { Tree } from "../types/tree";
 
 export function AdminTreesPage() {
@@ -11,6 +12,7 @@ export function AdminTreesPage() {
   const trees: Tree[] = paginatedTrees?.data ?? [];
   const [editingId, setEditingId] = useState<string | null>(null);
   const editingTree = trees.find((t) => t.id === editingId) ?? null;
+  const deleteTree = useDeleteTree();
 
   function handleEdit(tree: Tree) {
     setEditingId(tree.id);
@@ -22,7 +24,9 @@ export function AdminTreesPage() {
   }
 
   function handleDelete(id: string) {
-    console.log("delete", id);
+    deleteTree.mutate(id, {
+      onSuccess: () => { if (editingId === id) setEditingId(null); },
+    });
   }
 
   return (

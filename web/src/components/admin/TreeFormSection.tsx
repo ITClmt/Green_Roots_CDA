@@ -9,6 +9,7 @@ import {
   type TreeFormInput,
   type TreeFormOutput,
 } from "../../lib/schemas/treeFormSchema";
+import { useCreateTree, useUpdateTree } from "../../hooks/useTreeMutations";
 
 const emptyValues: TreeFormInput = {
   name: "",
@@ -29,6 +30,8 @@ interface Props {
 
 export function TreeFormSection({ editingTree, onCancel }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const createTree = useCreateTree();
+  const updateTree = useUpdateTree();
 
   const {
     register,
@@ -69,9 +72,18 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
       </h2>
 
       <form
-        onSubmit={handleSubmit((data: TreeFormOutput) =>
-          console.log(editingTree ? "update" : "create", data),
-        )}
+        onSubmit={handleSubmit((data: TreeFormOutput) => {
+          if (editingTree) {
+            updateTree.mutate(
+              { id: editingTree.id, payload: data },
+              { onSuccess: () => { reset(emptyValues); onCancel(); } },
+            );
+          } else {
+            createTree.mutate(data, {
+              onSuccess: () => reset(emptyValues),
+            });
+          }
+        })}
         className="space-y-4"
       >
         {/* Image */}
@@ -207,9 +219,14 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
           </button>
           <button
             type="submit"
-            className="flex-1 py-3 rounded-btn bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors cursor-pointer"
+            disabled={createTree.isPending || updateTree.isPending}
+            className="flex-1 py-3 rounded-btn bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {editingTree ? "Mettre à jour" : "Sauvegarder"}
+            {createTree.isPending || updateTree.isPending
+              ? "Enregistrement..."
+              : editingTree
+                ? "Mettre à jour"
+                : "Sauvegarder"}
           </button>
         </div>
       </form>
