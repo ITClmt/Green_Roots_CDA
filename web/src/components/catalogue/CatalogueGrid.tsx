@@ -4,10 +4,9 @@ import type { Tree } from "../../types/tree";
 
 interface CatalogueGridProps {
   searchQuery: string;
-  activeTag: string;
 }
 
-export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
+export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
   const {
     data,
     isLoading,
@@ -45,17 +44,15 @@ export function CatalogueGrid({ searchQuery, activeTag }: CatalogueGridProps) {
       oxygen: tree.oxygen,
       price: tree.price,
       image: tree.imageUrl ?? "",
-      tag: "all",
     }));
 
   const filtered = allTrees.filter((tree) => {
-    const matchesTag = activeTag === "all" || tree.tag === activeTag;
     const q = searchQuery.toLowerCase();
-    const matchesSearch =
+    return (
       !q ||
       tree.name.toLowerCase().includes(q) ||
-      tree.commonName.toLowerCase().includes(q);
-    return matchesTag && matchesSearch;
+      tree.commonName.toLowerCase().includes(q)
+    );
   });
 
   return (

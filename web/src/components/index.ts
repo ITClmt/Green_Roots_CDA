@@ -15,6 +15,5 @@ export { Commitment } from './commitment/Commitment';
 
 // ── Catalogue ─────────────────────────────────────────
 export { CatalogueSearchBar } from './catalogue/CatalogueSearchBar';
-export { CatalogueTagFilter } from './catalogue/CatalogueTagFilter';
 export { CatalogueCard } from './catalogue/CatalogueCard';
 export { CatalogueGrid } from './catalogue/CatalogueGrid';

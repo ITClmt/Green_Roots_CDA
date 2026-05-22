@@ -4,14 +4,12 @@ export interface TreeItem {
   id: string;
   name: string;
   commonName: string;
-  region: string;
-  country: string;
-  co2PerYear: number;
+  location: string;
+  co2: number;
+  oxygen: number;
   price: number;
   image: string;
   description?: string | null;
-  tag?: string; // e.g. 'amazonia' | 'sahel' | 'andes' | 'madagascar'
-  isBigImpact?: boolean;
 }
 
 interface CatalogueCardProps {
@@ -49,12 +47,6 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           {tree.price.toFixed(2)}€
         </div>
 
-        {/* Big Impact badge */}
-        {tree.isBigImpact && (
-          <div className="absolute top-3 left-3 bg-[#134d37] text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-sm">
-            Gros impact
-          </div>
-        )}
       </div>
 
       {/* Body */}
@@ -68,17 +60,17 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           </p>
         </div>
 
-        {/* Region + CO2 row */}
+        {/* Location + CO2 row */}
         <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
-          {tree.country && (
+          {tree.location && (
             <span className="flex items-center gap-1">
               <MapPin size={11} className="text-[#134d37]" />
-              {tree.country}
+              {tree.location}
             </span>
           )}
-          {tree.co2PerYear > 0 && (
+          {tree.co2 > 0 && (
             <span className="flex items-center gap-1 ml-auto">
-              <Leaf size={11} className="text-[#134d37]" />~{tree.co2PerYear}
+              <Leaf size={11} className="text-[#134d37]" />~{tree.co2}
               kg/an
             </span>
           )}
