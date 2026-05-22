@@ -1,8 +1,8 @@
 import type { Tree, ApiResponse, PaginatedTrees, TreePayload } from "../types/tree";
 import { API_BASE_URL } from "../utils/constant";
 
-export async function fetchTrees(): Promise<PaginatedTrees> {
-  const res = await fetch(`${API_BASE_URL}/trees`);
+export async function fetchTrees(page = 1, limit = 10): Promise<PaginatedTrees> {
+  const res = await fetch(`${API_BASE_URL}/trees?page=${page}&limit=${limit}`);
   const json: ApiResponse<PaginatedTrees> = await res.json();
   if (!res.ok || !json.success || !json.data)
     throw new Error(json.error ?? "Erreur");

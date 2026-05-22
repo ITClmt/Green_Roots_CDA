@@ -1,41 +1,38 @@
 import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { TreeRow } from "./TreeRow";
+import { useTrees } from "../../hooks/useTrees";
 import type { Tree } from "../../types/tree";
 
-const PREVIEW_LIMIT = 6;
+const PAGE_SIZE = 10;
 
 interface TreeStockSectionProps {
-  trees: Tree[];
-  isLoading: boolean;
   editingId: string | null;
   onEdit: (tree: Tree) => void;
   onDelete: (id: string) => void;
 }
 
 export function TreeStockSection({
-  trees,
-  isLoading,
   editingId,
   onEdit,
   onDelete,
 }: TreeStockSectionProps) {
-  const [showAll, setShowAll] = useState(false);
-  const displayed = showAll ? trees : trees.slice(0, PREVIEW_LIMIT);
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useTrees(page, PAGE_SIZE);
+  const trees = data?.data ?? [];
+  const { total = 0, totalPages = 1 } = data?.meta ?? {};
 
   return (
     <section className="bg-white rounded-card p-6 mb-6 shadow-sm">
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-base font-semibold text-content-primary">
           Articles en stock
         </h2>
         <span className="bg-primary text-white text-xs font-medium px-3 py-1 rounded-full">
-          {trees.length} produits
+          {total} produits
         </span>
       </div>
 
-      {/* States */}
       {isLoading ? (
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
@@ -52,7 +49,7 @@ export function TreeStockSection({
       ) : (
         <>
           <ul className="divide-y divide-surface-tertiary">
-            {displayed.map((tree) => (
+            {trees.map((tree) => (
               <TreeRow
                 key={tree.id}
                 tree={tree}
@@ -63,17 +60,30 @@ export function TreeStockSection({
             ))}
           </ul>
 
-          {trees.length > PREVIEW_LIMIT && (
-            <button
-              onClick={() => setShowAll((v) => !v)}
-              className="mt-4 flex items-center gap-1 text-sm text-primary font-medium hover:underline"
-            >
-              {showAll ? "Réduire" : "Voir tout le stock"}
-              <ChevronRight
-                size={14}
-                className={`transition-transform ${showAll ? "rotate-90" : ""}`}
-              />
-            </button>
+          {totalPages > 1 && (
+            <div className="mt-4 flex items-center justify-between text-sm text-content-secondary">
+              <button
+                onClick={() => setPage((p) => p - 1)}
+                disabled={page === 1}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-surface-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft size={14} />
+                Précédent
+              </button>
+
+              <span className="font-medium text-content-primary">
+                {page} / {totalPages}
+              </span>
+
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page === totalPages}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-surface-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Suivant
+                <ChevronRight size={14} />
+              </button>
+            </div>
           )}
         </>
       )}

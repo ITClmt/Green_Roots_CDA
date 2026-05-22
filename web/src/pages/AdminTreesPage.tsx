@@ -3,29 +3,25 @@ import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { TreeStockSection } from "../components/admin/TreeStockSection";
 import { TreeFormSection } from "../components/admin/TreeFormSection";
-import { useTrees } from "../hooks/useTrees";
 import { useDeleteTree } from "../hooks/useTreeMutations";
 import type { Tree } from "../types/tree";
 
 export function AdminTreesPage() {
-  const { data: paginatedTrees, isLoading } = useTrees();
-  const trees: Tree[] = paginatedTrees?.data ?? [];
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const editingTree = trees.find((t) => t.id === editingId) ?? null;
+  const [editingTree, setEditingTree] = useState<Tree | null>(null);
   const deleteTree = useDeleteTree();
 
   function handleEdit(tree: Tree) {
-    setEditingId(tree.id);
+    setEditingTree(tree);
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }
 
   function handleReset() {
-    setEditingId(null);
+    setEditingTree(null);
   }
 
   function handleDelete(id: string) {
     deleteTree.mutate(id, {
-      onSuccess: () => { if (editingId === id) setEditingId(null); },
+      onSuccess: () => { if (editingTree?.id === id) setEditingTree(null); },
     });
   }
 
@@ -41,15 +37,13 @@ export function AdminTreesPage() {
         </h1>
 
         <TreeStockSection
-          trees={trees}
-          isLoading={isLoading}
-          editingId={editingId}
+          editingId={editingTree?.id ?? null}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
 
         <TreeFormSection
-          key={editingId ?? "new"}
+          key={editingTree?.id ?? "new"}
           editingTree={editingTree}
           onCancel={handleReset}
         />
