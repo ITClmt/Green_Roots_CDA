@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImagePlus } from "lucide-react";
@@ -29,14 +28,12 @@ interface Props {
 }
 
 export function TreeFormSection({ editingTree, onCancel }: Props) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const createTree = useCreateTree();
   const updateTree = useUpdateTree();
 
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     control,
     formState: { errors },
@@ -53,14 +50,6 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
   });
 
   const imageUrl = useWatch({ control, name: "imageUrl" });
-
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => setValue("imageUrl", ev.target?.result as string);
-    reader.readAsDataURL(file);
-  }
 
   const inputClass =
     "w-full px-4 py-3 bg-[#E7E9E4] border border-transparent rounded-xl text-sm text-[#1a1c19] placeholder:text-[#9ea89e] focus:outline-none focus:border-[#0f5238] transition-colors";
@@ -87,38 +76,28 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
         className="space-y-4"
       >
         {/* Image */}
-        <div>
-          <label className="block text-xs font-medium text-content-secondary mb-2">
-            Image
-          </label>
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full h-48 border-2 border-dashed border-border-secondary rounded-xl flex flex-col items-center justify-center gap-2 bg-surface-tertiary hover:border-accent transition-colors cursor-pointer overflow-hidden"
-          >
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt="Aperçu"
-                className="h-full w-auto object-contain"
-              />
-            ) : (
-              <>
+        <Field label="Image (URL)">
+          <div className="space-y-2">
+            <div className="w-full h-48 border border-border-secondary rounded-xl overflow-hidden bg-surface-tertiary flex items-center justify-center">
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  alt="Aperçu"
+                  className="max-h-full max-w-full object-contain"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
+              ) : (
                 <ImagePlus size={24} className="text-content-secondary" />
-                <span className="text-xs text-content-secondary">
-                  Appuyer pour ajouter une image
-                </span>
-              </>
-            )}
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
-        </div>
+              )}
+            </div>
+            <input
+              {...register("imageUrl")}
+              type="text"
+              placeholder="https://example.com/image.jpg"
+              className={inputClass}
+            />
+          </div>
+        </Field>
 
         {/* Name */}
         <Field label="Nom" error={errors.name}>
