@@ -5,6 +5,6 @@ const orderSchema = z.object({
   quantity: z.number().int().min(1),
 });
 
-export const checkoutSchema = z.array(orderSchema).min(1);
+export const checkoutSchema = z.array(orderSchema).min(1).max(50);
 
 export type CheckoutDto = z.infer<typeof checkoutSchema>;

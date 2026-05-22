@@ -12,8 +12,8 @@ export const orderController = new Elysia({ prefix: `${API_BASE}/orders` })
   .post(
     "/",
     async ({ body, user, set }) => {
-        if (!user) throw new UnauthorizedError();
-      const result = await orderService.checkout(user.sub as string, body);
+      if (!user?.sub || typeof user.sub !== "string") throw new UnauthorizedError();
+      const result = await orderService.checkout(user.sub, body);
       set.status = 201;
       return ok(result, "Order created succesfully");
     },

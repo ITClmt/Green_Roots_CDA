@@ -7,12 +7,13 @@ import { sql, inArray } from "drizzle-orm";
 type Tree = typeof trees.$inferSelect;
 
 function validateAndComputeTotal(items: CheckoutDto, treeMap: Map<string, Tree>): number {
-  return items.reduce((total, item) => {
+  const totalCents = items.reduce((total, item) => {
     const tree = treeMap.get(item.tree_id);
     if (!tree) throw new NotFoundError(`Tree ${item.tree_id}`);
     if (tree.stock < item.quantity) throw new ConflictError(`Stock insuffisant pour "${tree.name}"`);
-    return total + parseFloat(tree.price) * item.quantity;
+    return total + Math.round(parseFloat(tree.price) * 100) * item.quantity;
   }, 0);
+  return totalCents / 100;
 }
 
 function buildBatchStockUpdate(items: CheckoutDto) {
@@ -25,7 +26,6 @@ function buildBatchStockUpdate(items: CheckoutDto) {
 export const orderService = {
   async checkout(userId: string, items: CheckoutDto): Promise<{ orderId: string }> {
     return db.transaction(async (tx) => {
-      
       const treeIds = items.map(item => item.tree_id);
 
       const fetchedTrees = await tx.select().from(trees).where(inArray(trees.id, treeIds));
