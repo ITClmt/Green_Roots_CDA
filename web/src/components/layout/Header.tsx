@@ -70,6 +70,20 @@ export function Header() {
           </NavLink>
           {user ? (
             <>
+              {user.role === "ADMIN" && (
+                <NavLink
+                  to="/admin/trees"
+                  className={({ isActive }) =>
+                    `text-sm font-medium transition-colors ${
+                      isActive
+                        ? "text-[#134d37] border-b-2 border-[#134d37]"
+                        : "text-gray-500 hover:text-[#134d37]"
+                    }`
+                  }
+                >
+                  Admin
+                </NavLink>
+              )}
               <NavLink
                 to="/profil"
                 className={({ isActive }) =>
@@ -138,6 +152,19 @@ export function Header() {
         </NavLink>
         {user ? (
           <>
+            {user.role === "ADMIN" && (
+              <NavLink
+                to="/admin/trees"
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `font-medium text-sm py-3 border-b border-gray-100 transition-colors ${
+                    isActive ? "text-[#134d37] font-semibold" : "text-gray-500 hover:text-[#134d37]"
+                  }`
+                }
+              >
+                Admin
+              </NavLink>
+            )}
             <NavLink
               to="/profil"
               onClick={() => setMenuOpen(false)}

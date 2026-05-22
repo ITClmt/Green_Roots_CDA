@@ -7,7 +7,7 @@ export function FeaturedSpecies() {
   const { data: trees, isLoading } = useTrees();
 
   // Show first 4 trees from the API
-  const featured = (trees ?? []).slice(0, 4);
+  const featured = (trees?.data ?? []).slice(0, 4);
 
   return (
     <section className="py-20 bg-[#f9faf7]">
