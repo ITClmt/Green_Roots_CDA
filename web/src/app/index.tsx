@@ -15,6 +15,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { TreeDetailPage } from "../pages/TreeDetailPage";
 import { ScrollToTop } from "../components/shared/ScrollToTop";
 import { NotFoundPage } from "../pages/NotFoundPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
 
 function Home() {
@@ -49,6 +50,7 @@ export default function App() {
       <Route path="/catalog/:id" element={<TreeDetailPage />} />
       <Route path="/profil" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/cart" element={<CartPage />} />
+      <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />

@@ -9,7 +9,7 @@ import { useAuth } from "../features/auth/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 export function CartPage() {
-  usePageTitle("Mon panier");
+  usePageTitle();
   const { items } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
