@@ -1,4 +1,4 @@
-import { createContext, useCallback, useReducer, type ReactNode } from "react";
+import { createContext, useCallback, useMemo, useReducer, type ReactNode } from "react";
 import type { CartItem } from "../../types/cart";
 import type { Tree } from "../../types/tree";
 
@@ -85,22 +85,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const [state, dispatch] = useReducer(persistedReducer, undefined, loadFromStorage);
 
-  const totalItems = state.items.reduce((sum, i) => sum + i.quantity, 0);
-  const totalPrice = state.items.reduce(
-    (sum, i) => sum + parseFloat(i.tree.price) * i.quantity,
-    0
+  const value = useMemo<CartContextValue>(
+    () => ({
+      ...state,
+      totalItems: state.items.reduce((sum, i) => sum + i.quantity, 0),
+      totalPrice: state.items.reduce(
+        (sum, i) => sum + parseFloat(i.tree.price) * i.quantity,
+        0
+      ),
+      addToCart: (tree, quantity) => dispatch({ type: "ADD", tree, quantity }),
+      removeFromCart: (treeId) => dispatch({ type: "REMOVE", treeId }),
+      increment: (treeId) => dispatch({ type: "INCREMENT", treeId }),
+      decrement: (treeId) => dispatch({ type: "DECREMENT", treeId }),
+      clearCart: () => dispatch({ type: "CLEAR" }),
+    }),
+    [state]
   );
-
-  const value: CartContextValue = {
-    ...state,
-    totalItems,
-    totalPrice,
-    addToCart: (tree, quantity) => dispatch({ type: "ADD", tree, quantity }),
-    removeFromCart: (treeId) => dispatch({ type: "REMOVE", treeId }),
-    increment: (treeId) => dispatch({ type: "INCREMENT", treeId }),
-    decrement: (treeId) => dispatch({ type: "DECREMENT", treeId }),
-    clearCart: () => dispatch({ type: "CLEAR" }),
-  };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
