@@ -10,7 +10,7 @@ interface CartItemRowProps {
 export function CartItemRow({ item }: CartItemRowProps) {
   const { increment, decrement, removeFromCart } = useCart();
   const { tree, quantity } = item;
-  const subtotalCents = Math.round(tree.price * quantity * 100);
+  const subtotal = tree.price * quantity;
 
   return (
     <div className="flex items-center gap-4 bg-white rounded-[var(--radius-card)] p-4 shadow-sm">
@@ -26,7 +26,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
         </p>
         <p className="text-xs text-content-secondary mt-0.5">{tree.species}</p>
         <p className="text-xs text-content-secondary mt-1">
-          {formatPrice(Math.round(tree.price * 100))} / unité
+          {formatPrice(tree.price)} / unité
         </p>
       </div>
 
@@ -54,7 +54,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
           </button>
         </div>
 
-        <p className="text-sm font-bold text-primary">{formatPrice(subtotalCents)}</p>
+        <p className="text-sm font-bold text-primary">{formatPrice(subtotal)}</p>
 
         <button
           onClick={() => removeFromCart(tree.id)}

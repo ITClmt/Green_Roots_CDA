@@ -1,4 +1,2 @@
-export const formatPrice = (cents: number) =>
-  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(
-    cents / 100
-  );
+export const formatPrice = (euros: number) =>
+  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(euros);

@@ -161,7 +161,7 @@ export function CheckoutForm({
           ) : (
             <>
               <Lock size={16} />
-              Valider la commande · {formatPrice(Math.round(totalPrice * 100))}
+              Valider la commande · {formatPrice(totalPrice)}
             </>
           )}
         </button>

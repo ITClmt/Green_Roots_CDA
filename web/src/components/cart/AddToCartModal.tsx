@@ -20,8 +20,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const [step, setStep] = useState<Step>("select");
   const [quantity, setQuantity] = useState(1);
 
-  const priceInCents = Math.round(tree.price * 100);
-  const subtotalInCents = priceInCents * quantity;
+  const subtotal = tree.price * quantity;
 
   const handleClose = () => {
     setStep("select");
@@ -76,7 +75,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
           <p className="text-sm font-semibold text-content-primary truncate">{tree.name}</p>
           <p className="text-xs text-content-secondary italic">{tree.species}</p>
           <p className="text-xs text-primary font-medium mt-1">
-            {formatPrice(priceInCents)} / unité
+            {formatPrice(tree.price)} / unité
           </p>
         </div>
       </div>
@@ -112,7 +111,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
           <div className="flex items-center justify-between pt-2 border-t border-surface-tertiary">
             <span className="text-sm text-content-secondary">Sous-total</span>
             <span className="text-base font-bold text-primary">
-              {formatPrice(subtotalInCents)}
+              {formatPrice(subtotal)}
             </span>
           </div>
 
@@ -139,7 +138,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
           <p className="text-sm text-content-secondary">
             Sous-total :{" "}
             <span className="font-semibold text-primary">
-              {formatPrice(subtotalInCents)}
+              {formatPrice(subtotal)}
             </span>
           </p>
 

@@ -67,7 +67,7 @@ export function OrderConfirmationPage() {
                         × {quantity}
                       </p>
                       <p className="text-xs text-content-secondary">
-                        {formatPrice(Math.round(tree.price * 100) * quantity)}
+                        {formatPrice(tree.price * quantity)}
                       </p>
                     </div>
                   </li>
@@ -77,7 +77,7 @@ export function OrderConfirmationPage() {
               <div className="px-6 py-4 border-t border-surface-tertiary flex justify-between items-center">
                 <span className="text-base font-bold text-content-primary">Total</span>
                 <span className="text-base font-bold text-primary">
-                  {formatPrice(Math.round(totalPrice * 100))}
+                  {formatPrice(totalPrice)}
                 </span>
               </div>
             </div>
