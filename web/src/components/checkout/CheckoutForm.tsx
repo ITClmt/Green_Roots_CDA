@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
 
 interface CheckoutFormProps {
@@ -8,7 +9,21 @@ interface CheckoutFormProps {
 }
 
 const inputClass =
-  "w-full px-4 py-3 bg-surface-primary border border-surface-tertiary rounded-xl text-sm text-content-secondary cursor-not-allowed select-none";
+  "w-full px-4 py-3 bg-white border border-surface-tertiary rounded-xl text-sm text-content-primary placeholder:text-content-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all";
+
+function formatCardNumber(value: string): string {
+  return value
+    .replace(/\D/g, "")
+    .slice(0, 16)
+    .replace(/(.{4})/g, "$1 ")
+    .trimEnd();
+}
+
+function formatExpiry(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 4);
+  if (digits.length <= 2) return digits;
+  return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+}
 
 export function CheckoutForm({
   totalPrice,
@@ -16,6 +31,9 @@ export function CheckoutForm({
   error,
   onSubmit,
 }: CheckoutFormProps) {
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+
   return (
     <div className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -35,8 +53,11 @@ export function CheckoutForm({
           </label>
           <input
             type="text"
-            readOnly
-            defaultValue="4242 4242 4242 4242"
+            inputMode="numeric"
+            placeholder="4242 4242 4242 4242"
+            value={cardNumber}
+            onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+            maxLength={19}
             className={inputClass}
           />
         </div>
@@ -48,8 +69,11 @@ export function CheckoutForm({
             </label>
             <input
               type="text"
-              readOnly
-              defaultValue="12/28"
+              inputMode="numeric"
+              placeholder="MM/AA"
+              value={expiry}
+              onChange={(e) => setExpiry(formatExpiry(e.target.value))}
+              maxLength={5}
               className={inputClass}
             />
           </div>
@@ -58,9 +82,9 @@ export function CheckoutForm({
               CVV
             </label>
             <input
-              type="text"
-              readOnly
-              defaultValue="•••"
+              type="password"
+              placeholder="•••"
+              maxLength={4}
               className={inputClass}
             />
           </div>
@@ -72,8 +96,7 @@ export function CheckoutForm({
           </label>
           <input
             type="text"
-            readOnly
-            defaultValue="Jean Dupont"
+            placeholder="Jean Dupont"
             className={inputClass}
           />
         </div>

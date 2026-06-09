@@ -5,16 +5,16 @@ import { useAuth } from "../features/auth/AuthContext";
 import { useCart } from "../features/cart/useCart";
 
 export function useCheckout() {
-  const { accessToken } = useAuth();
+  const { refreshSession } = useAuth();
   const { items, clearCart } = useCart();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: () => {
-      if (!accessToken) throw new Error("Vous devez être connecté pour passer une commande.");
+    mutationFn: async () => {
+      const freshToken = await refreshSession();
       return createOrder(
         items.map((i) => ({ tree_id: i.tree.id, quantity: i.quantity })),
-        accessToken,
+        freshToken,
       );
     },
     onSuccess: () => {

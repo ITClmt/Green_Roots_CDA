@@ -79,8 +79,10 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
       ref={dialogRef}
       onClick={handleBackdropClick}
       aria-labelledby="modal-title"
-      className="w-full max-w-md rounded-[var(--radius-card)] shadow-xl p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm open:flex open:flex-col"
+      className="w-full max-w-md m-auto rounded-[var(--radius-card)] shadow-xl p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
     >
+      <div className="flex flex-col">
+
       {/* Header */}
       <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-tertiary">
         <h2 id="modal-title" className="text-base font-semibold text-content-primary">
@@ -194,6 +196,8 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
           </div>
         </div>
       )}
+
+      </div>
     </dialog>
   );
 }
