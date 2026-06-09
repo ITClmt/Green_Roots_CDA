@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X, Minus, Plus, ShoppingBag, ArrowRight, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useCart } from "../../features/cart/useCart";
 import type { Tree } from "../../types/tree";
+import { formatPrice } from "../../utils/formatters";
 
 interface AddToCartModalProps {
   tree: Tree;
@@ -12,10 +13,6 @@ interface AddToCartModalProps {
 
 type Step = "select" | "confirm";
 
-const formatPrice = (cents: number) =>
-  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(
-    cents / 100
-  );
 
 export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const { addToCart } = useCart();
@@ -24,10 +21,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const [step, setStep] = useState<Step>("select");
   const [quantity, setQuantity] = useState(1);
 
-  const priceInCents = useMemo(
-    () => Math.round(tree.price * 100),
-    [tree.price]
-  );
+  const priceInCents = Math.round(tree.price * 100);
   const subtotalInCents = priceInCents * quantity;
 
   // Sync dialog open/close state with native dialog API
@@ -82,9 +76,8 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
       className="w-full max-w-md m-auto rounded-[var(--radius-card)] shadow-xl p-0 backdrop:bg-black/50 backdrop:backdrop-blur-sm"
     >
       <div className="flex flex-col">
-
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-tertiary">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-tertiary">
         <h2 id="modal-title" className="text-base font-semibold text-content-primary">
           {step === "select" ? "Ajouter au panier" : "Ajouté au panier !"}
         </h2>
@@ -97,8 +90,8 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
         </button>
       </div>
 
-      {/* Tree info */}
-      <div className="flex items-center gap-4 px-6 py-4 bg-surface-secondary">
+        {/* Tree info */}
+        <div className="flex items-center gap-4 px-6 py-4 bg-surface-secondary">
         <img
           src={
             tree.imageUrl ??
@@ -116,8 +109,8 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
         </div>
       </div>
 
-      {/* Step: select quantity */}
-      {step === "select" && (
+        {/* Step: select quantity */}
+        {step === "select" && (
         <div className="px-6 py-6 flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-content-primary">Quantité</span>
@@ -161,8 +154,8 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
         </div>
       )}
 
-      {/* Step: confirm */}
-      {step === "confirm" && (
+        {/* Step: confirm */}
+        {step === "confirm" && (
         <div className="px-6 py-6 flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <CheckCircle size={20} className="text-secondary shrink-0" />
@@ -199,5 +192,6 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
 
       </div>
     </dialog>
+
   );
 }

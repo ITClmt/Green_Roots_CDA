@@ -3,11 +3,7 @@ import { CheckCircle, TreePine } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import type { OrderConfirmationState } from "../hooks/useCheckout";
-
-const formatPrice = (cents: number) =>
-  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(
-    cents / 100
-  );
+import { formatPrice } from "../utils/formatters";
 
 export function OrderConfirmationPage() {
   const location = useLocation();

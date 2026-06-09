@@ -1,6 +1,7 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "../../features/cart/useCart";
 import type { CartItem } from "../../types/cart";
+import { formatPrice } from "../../utils/formatters";
 
 interface CartItemRowProps {
   item: CartItem;
@@ -9,7 +10,7 @@ interface CartItemRowProps {
 export function CartItemRow({ item }: CartItemRowProps) {
   const { increment, decrement, removeFromCart } = useCart();
   const { tree, quantity } = item;
-  const subtotal = (tree.price * quantity).toFixed(2);
+  const subtotalCents = Math.round(tree.price * quantity * 100);
 
   return (
     <div className="flex items-center gap-4 bg-white rounded-[var(--radius-card)] p-4 shadow-sm">
@@ -25,7 +26,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
         </p>
         <p className="text-xs text-content-secondary mt-0.5">{tree.species}</p>
         <p className="text-xs text-content-secondary mt-1">
-          {tree.price.toFixed(2)} € / unité
+          {formatPrice(Math.round(tree.price * 100))} / unité
         </p>
       </div>
 
@@ -53,7 +54,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
           </button>
         </div>
 
-        <p className="text-sm font-bold text-primary">{subtotal} €</p>
+        <p className="text-sm font-bold text-primary">{formatPrice(subtotalCents)}</p>
 
         <button
           onClick={() => removeFromCart(tree.id)}
