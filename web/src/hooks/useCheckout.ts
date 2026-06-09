@@ -3,10 +3,17 @@ import { useNavigate } from "react-router";
 import { createOrder } from "../api/orders";
 import { useAuth } from "../features/auth/AuthContext";
 import { useCart } from "../features/cart/useCart";
+import type { CartItem } from "../types/cart";
+
+export interface OrderConfirmationState {
+  orderId: string;
+  items: CartItem[];
+  totalPrice: number;
+}
 
 export function useCheckout() {
   const { refreshSession } = useAuth();
-  const { items, clearCart } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -17,9 +24,14 @@ export function useCheckout() {
         freshToken,
       );
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
+      const state: OrderConfirmationState = {
+        orderId: result.data.orderId,
+        items,
+        totalPrice,
+      };
       clearCart();
-      void navigate("/profil");
+      void navigate("/order-confirmation", { state });
     },
   });
 

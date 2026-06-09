@@ -7,6 +7,7 @@ const ROUTE_TITLES: Record<string, string> = {
   "/profil": "Mon Profil",
   "/cart": "Mon Panier",
   "/checkout": "Validation de la commande",
+  "/order-confirmation": "Commande confirmée",
   "/login": "Connexion",
   "/register": "Inscription",
 };
