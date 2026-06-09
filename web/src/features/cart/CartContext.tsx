@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useMemo, useReducer, type ReactNode } from "react";
 import type { CartItem } from "../../types/cart";
 import type { Tree } from "../../types/tree";
@@ -77,7 +78,7 @@ function persistedReducer(state: CartState, action: CartAction): CartState {
   return next;
 }
 
-export const CartContext = createContext<CartContextValue | null>(null);
+const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(persistedReducer, undefined, loadFromStorage);
