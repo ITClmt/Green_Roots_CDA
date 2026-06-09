@@ -1,4 +1,4 @@
-import { createContext, useCallback, useMemo, useReducer, type ReactNode } from "react";
+import { createContext, useMemo, useReducer, type ReactNode } from "react";
 import type { CartItem } from "../../types/cart";
 import type { Tree } from "../../types/tree";
 
@@ -71,18 +71,15 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
+function persistedReducer(state: CartState, action: CartAction): CartState {
+  const next = cartReducer(state, action);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  return next;
+}
+
 export const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const persistedReducer = useCallback(
-    (state: CartState, action: CartAction): CartState => {
-      const next = cartReducer(state, action);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      return next;
-    },
-    []
-  );
-
   const [state, dispatch] = useReducer(persistedReducer, undefined, loadFromStorage);
 
   const value = useMemo<CartContextValue>(

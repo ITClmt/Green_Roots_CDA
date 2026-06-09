@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { createOrder } from "../api/orders";
 import { useAuth } from "../features/auth/AuthContext";
 import { useCart } from "../features/cart/useCart";
+import { withRefresh } from "../utils/withRefresh";
 import type { CartItem } from "../types/cart";
 
 export interface OrderConfirmationState {
@@ -12,26 +13,24 @@ export interface OrderConfirmationState {
 }
 
 export function useCheckout() {
-  const { refreshSession } = useAuth();
+  const { accessToken, refreshSession } = useAuth();
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: async () => {
-      const freshToken = await refreshSession();
-      return createOrder(
-        items.map((i) => ({ tree_id: i.tree.id, quantity: i.quantity })),
-        freshToken,
-      );
+    mutationFn: () => {
+      if (!accessToken) throw new Error("Non authentifié");
+      const orderItems = items.map((i) => ({ tree_id: i.tree.id, quantity: i.quantity }));
+      return withRefresh((token) => createOrder(orderItems, token), accessToken, refreshSession);
     },
-    onSuccess: (result) => {
+    onSuccess: async (result) => {
       const state: OrderConfirmationState = {
         orderId: result.data.orderId,
         items,
         totalPrice,
       };
       clearCart();
-      void navigate("/order-confirmation", { state });
+      await navigate("/order-confirmation", { state });
     },
   });
 

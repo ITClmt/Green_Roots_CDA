@@ -47,9 +47,9 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
     setStep("confirm");
   };
 
-  const handleViewCart = () => {
+  const handleViewCart = async () => {
     handleClose();
-    void navigate("/cart");
+    await navigate("/cart");
   };
 
   return (

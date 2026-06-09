@@ -25,7 +25,7 @@ export function CheckoutPage() {
               Votre panier est vide
             </p>
             <button
-              onClick={() => void navigate("/catalog")}
+              onClick={async () => { await navigate("/catalog"); }}
               className="mt-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
             >
               Voir le catalogue

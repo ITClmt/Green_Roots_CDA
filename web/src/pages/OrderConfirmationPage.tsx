@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, Navigate } from "react-router";
 import { CheckCircle, TreePine } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -10,9 +10,11 @@ export function OrderConfirmationPage() {
   const navigate = useNavigate();
   const state = location.state as OrderConfirmationState | null;
 
+  const handleGoToProfile = async () => { await navigate("/profil"); };
+  const handleContinueShopping = async () => { await navigate("/catalog"); };
+
   if (!state?.orderId) {
-    void navigate("/", { replace: true });
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   const { orderId, items, totalPrice } = state;
@@ -87,13 +89,13 @@ export function OrderConfirmationPage() {
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => void navigate("/profil")}
+                onClick={handleGoToProfile}
                 className="flex-1 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
               >
                 Voir mon profil
               </button>
               <button
-                onClick={() => void navigate("/catalog")}
+                onClick={handleContinueShopping}
                 className="flex-1 py-3 bg-surface-primary hover:bg-surface-tertiary text-content-primary text-sm font-medium rounded-[var(--radius-btn)] transition-colors cursor-pointer"
               >
                 Continuer mes achats

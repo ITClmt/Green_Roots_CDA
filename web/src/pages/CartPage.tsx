@@ -14,11 +14,11 @@ export function CartPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!user) {
-      void navigate("/login");
+      await navigate("/login");
     } else {
-      void navigate("/checkout");
+      await navigate("/checkout");
     }
   };
 
@@ -42,7 +42,7 @@ export function CartPage() {
                 Explorez notre catalogue et ajoutez des arbres à planter.
               </p>
               <button
-                onClick={() => void navigate("/catalog")}
+                onClick={async () => { await navigate("/catalog"); }}
                 className="mt-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
               >
                 Voir le catalogue
