@@ -1,4 +1,4 @@
-import { useController, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
 import { formatPrice } from "../../utils/formatters";
@@ -45,9 +45,6 @@ export function CheckoutForm({
     resolver: zodResolver(checkoutSchema),
   });
 
-  const { field: cardNumberField } = useController({ name: "cardNumber", control });
-  const { field: expiryField } = useController({ name: "expiry", control });
-
   return (
     <div className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -65,17 +62,21 @@ export function CheckoutForm({
           <label className="text-sm font-medium text-content-primary">
             Numéro de carte
           </label>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="4242 4242 4242 4242"
-            maxLength={19}
-            className={inputClass}
-            value={cardNumberField.value ?? ""}
-            onChange={(e) => cardNumberField.onChange(formatCardNumber(e.target.value))}
-            onBlur={cardNumberField.onBlur}
-            name={cardNumberField.name}
-            ref={cardNumberField.ref}
+          <Controller
+            name="cardNumber"
+            control={control}
+            render={({ field }) => (
+              <input
+                {...field}
+                type="text"
+                inputMode="numeric"
+                placeholder="4242 4242 4242 4242"
+                maxLength={19}
+                className={inputClass}
+                value={field.value ?? ""}
+                onChange={(e) => field.onChange(formatCardNumber(e.target.value))}
+              />
+            )}
           />
           {errors.cardNumber && (
             <p className={errorClass}>{errors.cardNumber.message}</p>
@@ -87,17 +88,21 @@ export function CheckoutForm({
             <label className="text-sm font-medium text-content-primary">
               Expiration
             </label>
-            <input
-              type="text"
-              inputMode="numeric"
-              placeholder="MM/AA"
-              maxLength={5}
-              className={inputClass}
-              value={expiryField.value ?? ""}
-              onChange={(e) => expiryField.onChange(formatExpiry(e.target.value))}
-              onBlur={expiryField.onBlur}
-              name={expiryField.name}
-              ref={expiryField.ref}
+            <Controller
+              name="expiry"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="MM/AA"
+                  maxLength={5}
+                  className={inputClass}
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(formatExpiry(e.target.value))}
+                />
+              )}
             />
             {errors.expiry && (
               <p className={errorClass}>{errors.expiry.message}</p>

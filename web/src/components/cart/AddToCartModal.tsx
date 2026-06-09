@@ -23,19 +23,13 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const priceInCents = Math.round(tree.price * 100);
   const subtotalInCents = priceInCents * quantity;
 
-  const handleNativeClose = () => {
-    setStep("select");
-    setQuantity(1);
-    onClose();
-  };
-
-  const dialogRef = useDialogSync(isOpen, handleNativeClose);
-
   const handleClose = () => {
     setStep("select");
     setQuantity(1);
     onClose();
   };
+
+  const dialogRef = useDialogSync(isOpen, handleClose);
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === dialogRef.current) handleClose();
