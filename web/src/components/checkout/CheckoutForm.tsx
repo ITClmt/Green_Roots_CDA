@@ -1,5 +1,25 @@
-import { useState } from "react";
+import { useController, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
+import { formatPrice } from "../../utils/formatters";
+
+const checkoutSchema = z.object({
+  cardNumber: z
+    .string()
+    .regex(/^\d{4} \d{4} \d{4} \d{4}$/, "Numéro de carte invalide (16 chiffres)"),
+  expiry: z
+    .string()
+    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Format attendu : MM/AA"),
+  cvv: z
+    .string()
+    .regex(/^\d{3,4}$/, "CVV invalide (3 ou 4 chiffres)"),
+  cardHolder: z
+    .string()
+    .min(2, "Nom du titulaire requis"),
+});
+
+type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 interface CheckoutFormProps {
   totalPrice: number;
@@ -10,6 +30,8 @@ interface CheckoutFormProps {
 
 const inputClass =
   "w-full px-4 py-3 bg-white border border-surface-tertiary rounded-xl text-sm text-content-primary placeholder:text-content-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all";
+
+const errorClass = "text-xs text-red-500 mt-1";
 
 function formatCardNumber(value: string): string {
   return value
@@ -31,8 +53,17 @@ export function CheckoutForm({
   error,
   onSubmit,
 }: CheckoutFormProps) {
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutFormValues>({
+    resolver: zodResolver(checkoutSchema),
+  });
+
+  const { field: cardNumberField } = useController({ name: "cardNumber", control });
+  const { field: expiryField } = useController({ name: "expiry", control });
 
   return (
     <div className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm flex flex-col gap-6">
@@ -46,7 +77,7 @@ export function CheckoutForm({
         </span>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-content-primary">
             Numéro de carte
@@ -55,11 +86,17 @@ export function CheckoutForm({
             type="text"
             inputMode="numeric"
             placeholder="4242 4242 4242 4242"
-            value={cardNumber}
-            onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
             maxLength={19}
             className={inputClass}
+            value={cardNumberField.value ?? ""}
+            onChange={(e) => cardNumberField.onChange(formatCardNumber(e.target.value))}
+            onBlur={cardNumberField.onBlur}
+            name={cardNumberField.name}
+            ref={cardNumberField.ref}
           />
+          {errors.cardNumber && (
+            <p className={errorClass}>{errors.cardNumber.message}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -71,12 +108,19 @@ export function CheckoutForm({
               type="text"
               inputMode="numeric"
               placeholder="MM/AA"
-              value={expiry}
-              onChange={(e) => setExpiry(formatExpiry(e.target.value))}
               maxLength={5}
               className={inputClass}
+              value={expiryField.value ?? ""}
+              onChange={(e) => expiryField.onChange(formatExpiry(e.target.value))}
+              onBlur={expiryField.onBlur}
+              name={expiryField.name}
+              ref={expiryField.ref}
             />
+            {errors.expiry && (
+              <p className={errorClass}>{errors.expiry.message}</p>
+            )}
           </div>
+
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-content-primary">
               CVV
@@ -84,9 +128,14 @@ export function CheckoutForm({
             <input
               type="password"
               placeholder="•••"
+              inputMode="numeric"
               maxLength={4}
               className={inputClass}
+              {...register("cvv")}
             />
+            {errors.cvv && (
+              <p className={errorClass}>{errors.cvv.message}</p>
+            )}
           </div>
         </div>
 
@@ -98,33 +147,37 @@ export function CheckoutForm({
             type="text"
             placeholder="Jean Dupont"
             className={inputClass}
+            {...register("cardHolder")}
           />
+          {errors.cardHolder && (
+            <p className={errorClass}>{errors.cardHolder.message}</p>
+          )}
         </div>
-      </div>
 
-      {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-          {error.message}
-        </p>
-      )}
-
-      <button
-        onClick={onSubmit}
-        disabled={isPending}
-        className="w-full flex items-center justify-center gap-2 py-3.5 bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
-      >
-        {isPending ? (
-          <>
-            <Loader2 size={16} className="animate-spin" />
-            Validation en cours…
-          </>
-        ) : (
-          <>
-            <Lock size={16} />
-            Valider la commande · {totalPrice.toFixed(2)} €
-          </>
+        {error && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+            {error.message}
+          </p>
         )}
-      </button>
+
+        <button
+          type="submit"
+          disabled={isPending}
+          className="w-full flex items-center justify-center gap-2 py-3.5 bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
+        >
+          {isPending ? (
+            <>
+              <Loader2 size={16} className="animate-spin" />
+              Validation en cours…
+            </>
+          ) : (
+            <>
+              <Lock size={16} />
+              Valider la commande · {formatPrice(Math.round(totalPrice * 100))}
+            </>
+          )}
+        </button>
+      </form>
     </div>
   );
 }
