@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { createOrder } from "../api/orders";
 import { useAuth } from "../features/auth/AuthContext";
-import { useCart } from "../features/cart/useCart";
+import { useCart } from "../features/cart/CartContext";
 import { withRefresh } from "../utils/withRefresh";
 import type { CartItem } from "../types/cart";
 

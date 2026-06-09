@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, Minus, Plus, ShoppingBag, ArrowRight, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useCart } from "../../features/cart/useCart";
+import { useCart } from "../../features/cart/CartContext";
 import type { Tree } from "../../types/tree";
 import { formatPrice } from "../../utils/formatters";
 import { useDialogSync } from "../../hooks/useDialogSync";

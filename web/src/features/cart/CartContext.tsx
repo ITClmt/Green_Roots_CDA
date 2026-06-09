@@ -1,4 +1,4 @@
-import { createContext, useMemo, useReducer, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useReducer, type ReactNode } from "react";
 import type { CartItem } from "../../types/cart";
 import type { Tree } from "../../types/tree";
 
@@ -100,4 +100,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
+
+export function useCart() {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error("useCart must be used within a CartProvider");
+  return ctx;
 }

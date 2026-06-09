@@ -1,5 +1,5 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { useCart } from "../../features/cart/useCart";
+import { useCart } from "../../features/cart/CartContext";
 import type { CartItem } from "../../types/cart";
 import { formatPrice } from "../../utils/formatters";
 

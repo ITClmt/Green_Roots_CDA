@@ -4,7 +4,7 @@ import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { CartItemRow } from "../components/cart/CartItemRow";
 import { CartSummary } from "../components/cart/CartSummary";
-import { useCart } from "../features/cart/useCart";
+import { useCart } from "../features/cart/CartContext";
 import { useAuth } from "../features/auth/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 

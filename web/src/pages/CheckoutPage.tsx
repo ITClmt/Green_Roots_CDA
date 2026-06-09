@@ -4,7 +4,7 @@ import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { CheckoutForm } from "../components/checkout/CheckoutForm";
 import { CartItemRow } from "../components/cart/CartItemRow";
-import { useCart } from "../features/cart/useCart";
+import { useCart } from "../features/cart/CartContext";
 import { useCheckout } from "../hooks/useCheckout";
 import { usePageTitle } from "../hooks/usePageTitle";
 

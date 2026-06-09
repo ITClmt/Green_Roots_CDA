@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { Link, NavLink } from 'react-router';
 import { useAuth } from '../../features/auth/AuthContext';
-import { useCart } from '../../features/cart/useCart';
+import { useCart } from '../../features/cart/CartContext';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
