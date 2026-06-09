@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { X, Minus, Plus, ShoppingBag, ArrowRight, CheckCircle } from "lucide-react";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useCart } from "../../features/cart/CartContext";
 import type { Tree } from "../../types/tree";
 import { formatPrice } from "../../utils/formatters";
@@ -17,7 +17,6 @@ type Step = "select" | "confirm";
 
 export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const { addToCart } = useCart();
-  const navigate = useNavigate();
   const [step, setStep] = useState<Step>("select");
   const [quantity, setQuantity] = useState(1);
 
@@ -45,11 +44,6 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const handleAdd = () => {
     addToCart(tree, quantity);
     setStep("confirm");
-  };
-
-  const handleViewCart = async () => {
-    handleClose();
-    await navigate("/cart");
   };
 
   return (
@@ -156,13 +150,14 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
           </p>
 
           <div className="flex flex-col gap-2 pt-2">
-            <button
-              onClick={handleViewCart}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
+            <Link
+              to="/cart"
+              onClick={handleClose}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors"
             >
               <ShoppingBag size={16} />
               Voir le panier
-            </button>
+            </Link>
             <button
               onClick={handleClose}
               className="w-full flex items-center justify-center gap-2 py-3 bg-surface-primary hover:bg-surface-tertiary text-content-primary text-sm font-medium rounded-[var(--radius-btn)] transition-colors cursor-pointer"

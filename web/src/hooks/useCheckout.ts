@@ -17,7 +17,7 @@ export function useCheckout() {
   const { items, totalPrice, clearCart } = useCart();
   const navigate = useNavigate();
 
-  const mutation = useMutation({
+  return useMutation({
     mutationFn: () => {
       if (!accessToken) throw new Error("Non authentifié");
       const orderItems = items.map((i) => ({ tree_id: i.tree.id, quantity: i.quantity }));
@@ -33,6 +33,4 @@ export function useCheckout() {
       await navigate("/order-confirmation", { state });
     },
   });
-
-  return mutation;
 }
