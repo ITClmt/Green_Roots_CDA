@@ -1,25 +1,8 @@
 import { useController, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Loader2, Lock, ShieldCheck } from "lucide-react";
 import { formatPrice } from "../../utils/formatters";
-
-const checkoutSchema = z.object({
-  cardNumber: z
-    .string()
-    .regex(/^\d{4} \d{4} \d{4} \d{4}$/, "Numéro de carte invalide (16 chiffres)"),
-  expiry: z
-    .string()
-    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Format attendu : MM/AA"),
-  cvv: z
-    .string()
-    .regex(/^\d{3,4}$/, "CVV invalide (3 ou 4 chiffres)"),
-  cardHolder: z
-    .string()
-    .min(2, "Nom du titulaire requis"),
-});
-
-type CheckoutFormValues = z.infer<typeof checkoutSchema>;
+import { checkoutSchema, type CheckoutFormValues } from "../../lib/schemas/checkoutSchema";
 
 interface CheckoutFormProps {
   totalPrice: number;
