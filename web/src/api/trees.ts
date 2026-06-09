@@ -1,34 +1,80 @@
-import type { Tree, ApiResponse } from "../types/tree";
+import type {
+  Tree,
+  ApiResponse,
+  PaginatedTrees,
+  TreePayload,
+} from "../types/tree";
 import { API_BASE_URL } from "../utils/constant";
+import { ApiError } from "../utils/ApiError";
 
-export async function fetchTrees(): Promise<Tree[]> {
-  const response = await fetch(`${API_BASE_URL}/trees`);
+async function parseError(res: Response, fallback: string): Promise<ApiError> {
+  const json: ApiResponse<never> = await res.json().catch(() => ({}));
+  return new ApiError(res.status, json.error ?? fallback);
+}
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch trees: ${response.statusText}`);
-  }
-
-  const json: ApiResponse<Tree[]> = await response.json();
-
-  if (!json.success || !json.data) {
-    throw new Error(json.error ?? "Unknown error");
-  }
-
+export async function fetchTrees(
+  page = 1,
+  limit = 10,
+): Promise<PaginatedTrees> {
+  const res = await fetch(`${API_BASE_URL}/trees?page=${page}&limit=${limit}`);
+  const json: ApiResponse<PaginatedTrees> = await res.json();
+  if (!res.ok || !json.success || !json.data)
+    throw new ApiError(res.status, json.error ?? "Erreur");
   return json.data;
 }
 
 export async function fetchTreeById(id: string): Promise<Tree> {
-  const response = await fetch(`${API_BASE_URL}/trees/${id}`);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch tree: ${response.statusText}`);
-  }
-
-  const json: ApiResponse<Tree> = await response.json();
-
-  if (!json.success || !json.data) {
-    throw new Error(json.error ?? "Unknown error");
-  }
-
+  const res = await fetch(`${API_BASE_URL}/trees/${id}`);
+  const json: ApiResponse<Tree> = await res.json();
+  if (!res.ok || !json.success || !json.data)
+    throw new ApiError(res.status, json.error ?? "Erreur");
   return json.data;
+}
+
+export async function createTree(
+  payload: TreePayload,
+  token: string,
+): Promise<Tree> {
+  const res = await fetch(`${API_BASE_URL}/trees`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+  const json: ApiResponse<Tree> = await res.json();
+  if (!res.ok || !json.success || !json.data)
+    throw new ApiError(res.status, json.error ?? "Erreur lors de la création");
+  return json.data;
+}
+
+export async function updateTree(
+  id: string,
+  payload: Partial<TreePayload>,
+  token: string,
+): Promise<Tree> {
+  const res = await fetch(`${API_BASE_URL}/trees/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+  const json: ApiResponse<Tree> = await res.json();
+  if (!res.ok || !json.success || !json.data)
+    throw new ApiError(
+      res.status,
+      json.error ?? "Erreur lors de la modification",
+    );
+  return json.data;
+}
+
+export async function deleteTree(id: string, token: string): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/trees/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw await parseError(res, "Erreur lors de la suppression");
 }

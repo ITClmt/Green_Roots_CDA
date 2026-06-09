@@ -9,7 +9,7 @@ interface CartItemRowProps {
 export function CartItemRow({ item }: CartItemRowProps) {
   const { increment, decrement, removeFromCart } = useCart();
   const { tree, quantity } = item;
-  const subtotal = (parseFloat(tree.price) * quantity).toFixed(2);
+  const subtotal = (tree.price * quantity).toFixed(2);
 
   return (
     <div className="flex items-center gap-4 bg-white rounded-[var(--radius-card)] p-4 shadow-sm">
@@ -25,7 +25,7 @@ export function CartItemRow({ item }: CartItemRowProps) {
         </p>
         <p className="text-xs text-content-secondary mt-0.5">{tree.species}</p>
         <p className="text-xs text-content-secondary mt-1">
-          {parseFloat(tree.price).toFixed(2)} € / unité
+          {tree.price.toFixed(2)} € / unité
         </p>
       </div>
 

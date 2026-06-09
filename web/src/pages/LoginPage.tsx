@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { useAuth } from "../features/auth/AuthContext";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -20,10 +20,7 @@ export function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  if (user) {
-    navigate("/profil", { replace: true });
-    return null;
-  }
+  if (user) return <Navigate to="/profil" replace />;
 
   const onSubmit = async (data: LoginFormValues) => {
     setServerError("");

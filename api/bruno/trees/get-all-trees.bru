@@ -5,7 +5,14 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/api/v1/trees
+  url: {{baseUrl}}/api/v1/trees?sortBy=price&sortOrder=desc
   body: none
   auth: none
+}
+
+params:query {
+  sortBy: price
+  sortOrder: desc
+  ~page: 1
+  ~limit: 5
 }

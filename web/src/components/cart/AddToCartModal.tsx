@@ -25,7 +25,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const [quantity, setQuantity] = useState(1);
 
   const priceInCents = useMemo(
-    () => Math.round(parseFloat(tree.price) * 100),
+    () => Math.round(tree.price * 100),
     [tree.price]
   );
   const subtotalInCents = priceInCents * quantity;

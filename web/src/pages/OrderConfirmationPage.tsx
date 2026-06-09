@@ -73,7 +73,7 @@ export function OrderConfirmationPage() {
                         × {quantity}
                       </p>
                       <p className="text-xs text-content-secondary">
-                        {formatPrice(Math.round(parseFloat(tree.price) * 100) * quantity)}
+                        {formatPrice(Math.round(tree.price * 100) * quantity)}
                       </p>
                     </div>
                   </li>

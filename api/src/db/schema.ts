@@ -32,7 +32,7 @@ export const trees = pgTable("trees", {
   location: text("location"),
   co2: integer("co2").notNull().default(0),
   oxygen:integer("oxygen").notNull().default(0),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  price: numeric("price", { precision: 10, scale: 2, mode: "number" }).notNull(),
   imageUrl: text("image_url"),
   stock: integer("stock").notNull().default(0),
   ...timestamps,

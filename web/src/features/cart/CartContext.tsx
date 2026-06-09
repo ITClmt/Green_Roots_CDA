@@ -90,7 +90,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       ...state,
       totalItems: state.items.reduce((sum, i) => sum + i.quantity, 0),
       totalPrice: state.items.reduce(
-        (sum, i) => sum + parseFloat(i.tree.price) * i.quantity,
+        (sum, i) => sum + i.tree.price * i.quantity,
         0
       ),
       addToCart: (tree, quantity) => dispatch({ type: "ADD", tree, quantity }),

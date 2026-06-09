@@ -1,22 +1,21 @@
-import { useState } from 'react';
-import { CatalogueCard, type TreeItem } from './CatalogueCard';
-import { useTrees } from '../../hooks/useTrees';
-import { CatalogueTagFilter } from './CatalogueTagFilter';
-import type { Tree } from '../../types/tree';
-
-const PAGE_SIZE = 9;
+import { CatalogueCard, type TreeItem } from "./CatalogueCard";
+import { useInfiniteTrees } from "../../hooks/useTrees";
+import type { Tree } from "../../types/tree";
 
 interface CatalogueGridProps {
   searchQuery: string;
-  activeTag: string;
-  onTagChange: (tag: string) => void;
 }
 
-export function CatalogueGrid({ searchQuery, activeTag, onTagChange }: CatalogueGridProps) {
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const { data: trees, isLoading, error } = useTrees();
+export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteTrees();
 
-  /* Loading state */
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-24 text-gray-400 text-sm">
@@ -25,7 +24,6 @@ export function CatalogueGrid({ searchQuery, activeTag, onTagChange }: Catalogue
     );
   }
 
-  /* Error state */
   if (error) {
     return (
       <div className="flex justify-center items-center py-24 text-red-400 text-sm">
@@ -34,94 +32,56 @@ export function CatalogueGrid({ searchQuery, activeTag, onTagChange }: Catalogue
     );
   }
 
-  /* Map API Tree → TreeItem (shape expected by CatalogueCard) */
-  const allTrees: Array<{ item: TreeItem; original: Tree }> = (trees ?? []).map((tree) => ({
-    item: {
-      id: tree.id,
-      name: tree.species,
-      commonName: tree.name,
-      description: tree.description,
-      region: tree.location ?? '',
-      country: tree.location ?? '',
-      co2PerYear: tree.co2,
-      oxygen: tree.oxygen,
-      price: parseFloat(tree.price),
-      image: tree.imageUrl ?? '',
-      tag: tree.location ?? '',
-    },
-    original: tree,
-  }));
+  const allTrees: Array<{ item: TreeItem; original: Tree }> = (data?.pages ?? [])
+    .flatMap((page) => page.data)
+    .map((tree: Tree) => ({
+      item: {
+        id: tree.id,
+        name: tree.name,
+        species: tree.species,
+        description: tree.description,
+        location: tree.location ?? "",
+        co2: tree.co2,
+        oxygen: tree.oxygen,
+        price: tree.price,
+        image: tree.imageUrl ?? "",
+      },
+      original: tree,
+    }));
 
-  /* Build dynamic location tags from actual data */
-  const locationTags = [
-    { id: 'all', label: 'Toutes les régions' },
-    ...Array.from(new Set(allTrees.map(({ item }) => item.country).filter(Boolean))).map(
-      (loc) => ({ id: loc, label: loc })
-    ),
-  ];
-
-  /* Filter trees */
   const filtered = allTrees.filter(({ item }) => {
-    const matchesTag = activeTag === 'all' || item.country === activeTag;
     const q = searchQuery.toLowerCase();
-    const matchesSearch =
+    return (
       !q ||
       item.name.toLowerCase().includes(q) ||
-      item.commonName.toLowerCase().includes(q);
-    return matchesTag && matchesSearch;
+      item.species.toLowerCase().includes(q)
+    );
   });
-
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
 
   return (
     <section id="catalogue-grid">
-      <div className="mb-8">
-        <CatalogueTagFilter
-          tags={locationTags}
-          activeTag={activeTag}
-          onTagChange={onTagChange}
-        />
-      </div>
       {filtered.length === 0 ? (
         <div className="text-center py-20 text-gray-400 text-sm">
           Aucun arbre ne correspond à votre recherche.
         </div>
       ) : (
-        <>
-          <div
-            className="
-              grid gap-5
-              grid-cols-1
-              sm:grid-cols-2
-              lg:grid-cols-3
-            "
-          >
-            {visible.map(({ item, original }) => (
-              <CatalogueCard key={item.id} tree={item} originalTree={original} />
-            ))}
-          </div>
+        <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map(({ item, original }) => (
+            <CatalogueCard key={item.id} tree={item} originalTree={original} />
+          ))}
+        </div>
+      )}
 
-          {hasMore && (
-            <div className="mt-10 flex justify-center">
-              <button
-                id="load-more-btn"
-                onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="
-                  px-8 py-3.5
-                  bg-[#134d37] hover:bg-[#0f3d2b]
-                  text-white text-sm font-semibold
-                  rounded-full shadow-md
-                  transition-all duration-200
-                  hover:shadow-lg hover:-translate-y-0.5
-                  cursor-pointer
-                "
-              >
-                Charger plus d'arbres
-              </button>
-            </div>
-          )}
-        </>
+      {hasNextPage && (
+        <div className="mt-10 flex justify-center">
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="px-8 py-3.5 bg-[#134d37] hover:bg-[#0f3d2b] text-white text-sm font-semibold rounded-full shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isFetchingNextPage ? "Chargement..." : "Charger plus d'arbres"}
+          </button>
+        </div>
       )}
     </section>
   );

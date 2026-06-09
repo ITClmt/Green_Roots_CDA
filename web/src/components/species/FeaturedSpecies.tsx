@@ -4,10 +4,9 @@ import { SpeciesCard } from './SpeciesCard';
 import { useTrees } from '../../hooks/useTrees';
 
 export function FeaturedSpecies() {
-  const { data: trees, isLoading } = useTrees();
+  const { data: trees, isLoading } = useTrees(1, 4);
 
-  // Show first 4 trees from the API
-  const featured = (trees ?? []).slice(0, 4);
+  const featured = trees?.data ?? [];
 
   return (
     <section className="py-20 bg-[#f9faf7]">
