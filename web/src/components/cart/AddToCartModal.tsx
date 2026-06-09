@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { X, Minus, Plus, ShoppingBag, ArrowRight, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useCart } from "../../features/cart/useCart";
 import type { Tree } from "../../types/tree";
 import { formatPrice } from "../../utils/formatters";
+import { useDialogSync } from "../../hooks/useDialogSync";
 
 interface AddToCartModalProps {
   tree: Tree;
@@ -17,36 +18,19 @@ type Step = "select" | "confirm";
 export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
   const { addToCart } = useCart();
   const navigate = useNavigate();
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const [step, setStep] = useState<Step>("select");
   const [quantity, setQuantity] = useState(1);
 
   const priceInCents = Math.round(tree.price * 100);
   const subtotalInCents = priceInCents * quantity;
 
-  // Sync dialog open/close state with native dialog API
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (isOpen) {
-      dialog.showModal();
-    } else {
-      dialog.close();
-    }
-  }, [isOpen]);
+  const handleNativeClose = () => {
+    setStep("select");
+    setQuantity(1);
+    onClose();
+  };
 
-  // Handle Escape key (fires native "close" event on <dialog>)
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    const handleNativeClose = () => {
-      setStep("select");
-      setQuantity(1);
-      onClose();
-    };
-    dialog.addEventListener("close", handleNativeClose);
-    return () => dialog.removeEventListener("close", handleNativeClose);
-  }, [onClose]);
+  const dialogRef = useDialogSync(isOpen, handleNativeClose);
 
   const handleClose = () => {
     setStep("select");
