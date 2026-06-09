@@ -1,26 +1,15 @@
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 import { ShoppingCart } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { CartItemRow } from "../components/cart/CartItemRow";
 import { CartSummary } from "../components/cart/CartSummary";
 import { useCart } from "../features/cart/CartContext";
-import { useAuth } from "../features/auth/AuthContext";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 export function CartPage() {
   usePageTitle();
   const { items } = useCart();
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const handleCheckout = async () => {
-    if (!user) {
-      await navigate("/login");
-    } else {
-      await navigate("/checkout");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-surface-secondary font-sans">
@@ -41,12 +30,12 @@ export function CartPage() {
               <p className="text-sm text-content-secondary">
                 Explorez notre catalogue et ajoutez des arbres à planter.
               </p>
-              <button
-                onClick={async () => { await navigate("/catalog"); }}
-                className="mt-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
+              <Link
+                to="/catalog"
+                className="mt-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors"
               >
                 Voir le catalogue
-              </button>
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -57,7 +46,7 @@ export function CartPage() {
               </section>
 
               <aside className="lg:col-span-1">
-                <CartSummary onCheckout={handleCheckout} />
+                <CartSummary to="/checkout" />
               </aside>
             </div>
           )}

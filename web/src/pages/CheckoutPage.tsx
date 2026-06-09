@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 import { ShoppingBag } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -7,11 +7,11 @@ import { CartItemRow } from "../components/cart/CartItemRow";
 import { useCart } from "../features/cart/CartContext";
 import { useCheckout } from "../hooks/useCheckout";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { formatPrice } from "../utils/formatters";
 
 export function CheckoutPage() {
   usePageTitle();
   const { items, totalPrice } = useCart();
-  const navigate = useNavigate();
   const { mutate, isPending, error } = useCheckout();
 
   if (items.length === 0) {
@@ -24,12 +24,12 @@ export function CheckoutPage() {
             <p className="text-lg font-semibold text-content-primary">
               Votre panier est vide
             </p>
-            <button
-              onClick={async () => { await navigate("/catalog"); }}
-              className="mt-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
+            <Link
+              to="/catalog"
+              className="mt-2 px-6 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors"
             >
               Voir le catalogue
-            </button>
+            </Link>
           </main>
           <Footer />
         </div>
@@ -60,7 +60,7 @@ export function CheckoutPage() {
               <div className="flex justify-between items-center pt-2 border-t border-surface-tertiary">
                 <span className="text-base font-bold text-content-primary">Total</span>
                 <span className="text-base font-bold text-primary">
-                  {totalPrice.toFixed(2)} €
+                  {formatPrice(totalPrice)}
                 </span>
               </div>
             </section>

@@ -1,11 +1,13 @@
+import { Link } from "react-router";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "../../features/cart/CartContext";
+import { formatPrice } from "../../utils/formatters";
 
 interface CartSummaryProps {
-  onCheckout: () => void;
+  to: string;
 }
 
-export function CartSummary({ onCheckout }: CartSummaryProps) {
+export function CartSummary({ to }: CartSummaryProps) {
   const { totalItems, totalPrice } = useCart();
 
   return (
@@ -16,23 +18,23 @@ export function CartSummary({ onCheckout }: CartSummaryProps) {
 
       <div className="flex items-center justify-between text-sm text-content-secondary">
         <span>Articles ({totalItems})</span>
-        <span>{totalPrice.toFixed(2)} €</span>
+        <span>{formatPrice(totalPrice)}</span>
       </div>
 
       <div className="border-t border-surface-tertiary pt-4 flex items-center justify-between">
         <span className="text-base font-bold text-content-primary">Total</span>
         <span className="text-base font-bold text-primary">
-          {totalPrice.toFixed(2)} €
+          {formatPrice(totalPrice)}
         </span>
       </div>
 
-      <button
-        onClick={onCheckout}
-        className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
+      <Link
+        to={to}
+        className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors"
       >
         <ShoppingBag size={16} />
         Procéder au paiement
-      </button>
+      </Link>
     </div>
   );
 }
