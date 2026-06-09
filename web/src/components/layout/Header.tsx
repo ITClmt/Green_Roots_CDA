@@ -66,7 +66,7 @@ export function Header() {
               }`
             }
           >
-            Catalog
+            Catalogue
           </NavLink>
           {user ? (
             <>
@@ -148,7 +148,7 @@ export function Header() {
             }`
           }
         >
-          Catalog
+          Catalogue
         </NavLink>
         {user ? (
           <>

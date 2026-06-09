@@ -36,8 +36,8 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
     .flatMap((page) => page.data)
     .map((tree: Tree) => ({
       id: tree.id,
-      name: tree.species,
-      commonName: tree.name,
+      name: tree.name,
+      species: tree.species,
       description: tree.description,
       location: tree.location ?? "",
       co2: tree.co2,
@@ -51,7 +51,7 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
     return (
       !q ||
       tree.name.toLowerCase().includes(q) ||
-      tree.commonName.toLowerCase().includes(q)
+      tree.species.toLowerCase().includes(q)
     );
   });
 

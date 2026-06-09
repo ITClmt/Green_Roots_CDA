@@ -5,6 +5,12 @@ import type {
   TreePayload,
 } from "../types/tree";
 import { API_BASE_URL } from "../utils/constant";
+import { ApiError } from "../utils/ApiError";
+
+async function parseError(res: Response, fallback: string): Promise<ApiError> {
+  const json: ApiResponse<never> = await res.json().catch(() => ({}));
+  return new ApiError(res.status, json.error ?? fallback);
+}
 
 export async function fetchTrees(
   page = 1,
@@ -13,7 +19,7 @@ export async function fetchTrees(
   const res = await fetch(`${API_BASE_URL}/trees?page=${page}&limit=${limit}`);
   const json: ApiResponse<PaginatedTrees> = await res.json();
   if (!res.ok || !json.success || !json.data)
-    throw new Error(json.error ?? "Erreur");
+    throw new ApiError(res.status, json.error ?? "Erreur");
   return json.data;
 }
 
@@ -21,7 +27,7 @@ export async function fetchTreeById(id: string): Promise<Tree> {
   const res = await fetch(`${API_BASE_URL}/trees/${id}`);
   const json: ApiResponse<Tree> = await res.json();
   if (!res.ok || !json.success || !json.data)
-    throw new Error(json.error ?? "Erreur");
+    throw new ApiError(res.status, json.error ?? "Erreur");
   return json.data;
 }
 
@@ -39,7 +45,7 @@ export async function createTree(
   });
   const json: ApiResponse<Tree> = await res.json();
   if (!res.ok || !json.success || !json.data)
-    throw new Error(json.error ?? "Erreur lors de la création");
+    throw new ApiError(res.status, json.error ?? "Erreur lors de la création");
   return json.data;
 }
 
@@ -58,7 +64,10 @@ export async function updateTree(
   });
   const json: ApiResponse<Tree> = await res.json();
   if (!res.ok || !json.success || !json.data)
-    throw new Error(json.error ?? "Erreur lors de la modification");
+    throw new ApiError(
+      res.status,
+      json.error ?? "Erreur lors de la modification",
+    );
   return json.data;
 }
 
@@ -67,10 +76,5 @@ export async function deleteTree(id: string, token: string): Promise<void> {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) {
-    const json: ApiResponse<never> = await res
-      .json()
-      .catch(() => ({}) as ApiResponse<never>);
-    throw new Error(json.error ?? "Erreur lors de la suppression");
-  }
+  if (!res.ok) throw await parseError(res, "Erreur lors de la suppression");
 }

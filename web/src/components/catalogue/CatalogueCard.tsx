@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 export interface TreeItem {
   id: string;
   name: string;
-  commonName: string;
+  species: string;
   location: string;
   co2: number;
   oxygen: number;
@@ -45,7 +45,7 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               "https://placehold.co/400x300/e8f5e9/134d37?text=" +
-              encodeURIComponent(tree.commonName);
+              encodeURIComponent(tree.species);
           }}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -63,7 +63,7 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
             {tree.name}
           </h3>
           <p className="text-xs text-gray-400 mt-0.5 italic">
-            {tree.commonName}
+            {tree.species}
           </p>
         </div>
 

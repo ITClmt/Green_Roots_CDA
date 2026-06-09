@@ -50,7 +50,15 @@ export function TreeRow({ tree, isEditing, onEdit, onDelete }: TreeRowProps) {
           <Pencil size={14} />
         </button>
         <button
-          onClick={() => onDelete(tree.id)}
+          // A changer pour un modal si besoin
+          onClick={() => {
+            if (
+              window.confirm(
+                `Supprimer "${tree.name}" ? Cette action est irréversible.`,
+              )
+            )
+              onDelete(tree.id);
+          }}
           className="p-2 text-content-secondary hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
           aria-label="Supprimer"
         >

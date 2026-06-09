@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { useAuth } from "../features/auth/AuthContext";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -23,10 +23,7 @@ export function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  if (user) {
-    navigate("/profil", { replace: true });
-    return null;
-  }
+  if (user) return <Navigate to="/profil" replace />;
 
   const onSubmit = async (data: RegisterFormValues) => {
     setServerError("");
@@ -59,7 +56,7 @@ export function RegisterPage() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md bg-white rounded-[24px] shadow-sm p-8">
+        <div className="w-full max-w-md bg-white rounded-card shadow-sm p-8">
           <h1 className="text-2xl font-bold mb-8">Créer un compte</h1>
 
           <form
@@ -134,7 +131,7 @@ export function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-1 w-full py-3.5 bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold rounded-[12px] transition-colors disabled:opacity-60"
+              className="mt-1 w-full py-3.5 bg-primary hover:bg-primary-hover active:bg-primary-active text-white text-sm font-semibold rounded-btn transition-colors disabled:opacity-60"
             >
               {isSubmitting ? "Création en cours…" : "Créer mon compte"}
             </button>

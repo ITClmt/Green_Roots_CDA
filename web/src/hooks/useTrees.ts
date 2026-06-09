@@ -1,5 +1,13 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { fetchTrees } from "../api/trees";
+import { fetchTrees, fetchTreeById } from "../api/trees";
+
+export function useTree(id: string) {
+  return useQuery({
+    queryKey: ["tree", id],
+    queryFn: () => fetchTreeById(id),
+    enabled: !!id,
+  });
+}
 
 export function useTrees(page = 1, limit = 10) {
   return useQuery({

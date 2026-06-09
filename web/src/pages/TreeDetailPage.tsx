@@ -2,7 +2,7 @@ import { ArrowLeft, Leaf, MapPin, Package, Wind } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { Footer } from "../components/layout/Footer";
 import { Header } from "../components/layout/Header";
-import { useTree } from "../hooks/useTree";
+import { useTree } from "../hooks/useTrees";
 
 export function TreeDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -79,7 +79,7 @@ export function TreeDetailPage() {
                 className="w-full h-full object-cover"
               />
               {/* Gradient overlay — strong at bottom for text legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/20 to-transparent" />
 
               {/* Price badge */}
               <div className="absolute top-5 right-5 bg-white/95 backdrop-blur-sm text-[#1a2f24] font-bold text-lg px-4 py-2 rounded-full shadow">
@@ -87,16 +87,22 @@ export function TreeDetailPage() {
               </div>
 
               {/* Name overlay on image */}
-              <div className="absolute bottom-0 left-0 right-0 px-6 py-6 bg-gradient-to-t from-black/80 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 px-6 py-6 bg-linear-to-t from-black/80 to-transparent">
                 <h1
                   className="text-3xl sm:text-4xl font-bold leading-tight"
-                  style={{ color: '#ffffff', textShadow: '0 2px 16px rgba(0,0,0,0.9)' }}
+                  style={{
+                    color: "#ffffff",
+                    textShadow: "0 2px 16px rgba(0,0,0,0.9)",
+                  }}
                 >
                   {tree.name}
                 </h1>
                 <p
                   className="italic text-base mt-1"
-                  style={{ color: 'rgba(255,255,255,0.85)', textShadow: '0 1px 8px rgba(0,0,0,0.8)' }}
+                  style={{
+                    color: "rgba(255,255,255,0.85)",
+                    textShadow: "0 1px 8px rgba(0,0,0,0.8)",
+                  }}
                 >
                   {tree.species}
                 </p>
