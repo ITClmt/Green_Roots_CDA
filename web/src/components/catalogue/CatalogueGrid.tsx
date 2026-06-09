@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CatalogueCard, type TreeItem } from './CatalogueCard';
 import { useTrees } from '../../hooks/useTrees';
 import { CatalogueTagFilter } from './CatalogueTagFilter';
+import type { Tree } from '../../types/tree';
 
 const PAGE_SIZE = 9;
 
@@ -34,36 +35,39 @@ export function CatalogueGrid({ searchQuery, activeTag, onTagChange }: Catalogue
   }
 
   /* Map API Tree → TreeItem (shape expected by CatalogueCard) */
-  const allTrees: TreeItem[] = (trees ?? []).map((tree) => ({
-    id: tree.id,
-    name: tree.species,
-    commonName: tree.name,
-    description: tree.description,
-    region: tree.location ?? '',
-    country: tree.location ?? '',
-    co2PerYear: tree.co2,
-    oxygen: tree.oxygen,
-    price: parseFloat(tree.price),
-    image: tree.imageUrl ?? '',
-    tag: tree.location ?? '',
+  const allTrees: Array<{ item: TreeItem; original: Tree }> = (trees ?? []).map((tree) => ({
+    item: {
+      id: tree.id,
+      name: tree.species,
+      commonName: tree.name,
+      description: tree.description,
+      region: tree.location ?? '',
+      country: tree.location ?? '',
+      co2PerYear: tree.co2,
+      oxygen: tree.oxygen,
+      price: parseFloat(tree.price),
+      image: tree.imageUrl ?? '',
+      tag: tree.location ?? '',
+    },
+    original: tree,
   }));
 
   /* Build dynamic location tags from actual data */
   const locationTags = [
     { id: 'all', label: 'Toutes les régions' },
-    ...Array.from(new Set(allTrees.map((t) => t.country).filter(Boolean))).map(
+    ...Array.from(new Set(allTrees.map(({ item }) => item.country).filter(Boolean))).map(
       (loc) => ({ id: loc, label: loc })
     ),
   ];
 
   /* Filter trees */
-  const filtered = allTrees.filter((tree) => {
-    const matchesTag = activeTag === 'all' || tree.country === activeTag;
+  const filtered = allTrees.filter(({ item }) => {
+    const matchesTag = activeTag === 'all' || item.country === activeTag;
     const q = searchQuery.toLowerCase();
     const matchesSearch =
       !q ||
-      tree.name.toLowerCase().includes(q) ||
-      tree.commonName.toLowerCase().includes(q);
+      item.name.toLowerCase().includes(q) ||
+      item.commonName.toLowerCase().includes(q);
     return matchesTag && matchesSearch;
   });
 
@@ -93,8 +97,8 @@ export function CatalogueGrid({ searchQuery, activeTag, onTagChange }: Catalogue
               lg:grid-cols-3
             "
           >
-            {visible.map((tree) => (
-              <CatalogueCard key={tree.id} tree={tree} />
+            {visible.map(({ item, original }) => (
+              <CatalogueCard key={item.id} tree={item} originalTree={original} />
             ))}
           </div>
 
