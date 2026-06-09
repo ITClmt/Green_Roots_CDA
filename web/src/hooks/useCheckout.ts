@@ -25,7 +25,7 @@ export function useCheckout() {
     },
     onSuccess: async (result) => {
       const state: OrderConfirmationState = {
-        orderId: result.data.orderId,
+        orderId: result.data?.orderId ?? "",
         items,
         totalPrice,
       };

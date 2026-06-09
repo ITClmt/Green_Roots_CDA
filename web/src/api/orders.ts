@@ -1,32 +1,20 @@
 import { API_BASE_URL } from "../utils/constant";
+import { ApiError } from "../utils/ApiError";
+import type { ApiResponse } from "../types/tree";
 
 export interface OrderItem {
   tree_id: string;
   quantity: number;
 }
 
-interface OrderResponse {
-  data: { orderId: string };
-}
-
-function parseError(json: Record<string, unknown>): string {
-  const raw = json.error;
-  if (typeof raw === "string") {
-    try {
-      const parsed = JSON.parse(raw);
-      return parsed.message ?? raw;
-    } catch {
-      return raw;
-    }
-  }
-  if (typeof json.message === "string") return json.message;
-  return "Une erreur est survenue.";
+interface OrderData {
+  orderId: string;
 }
 
 export async function createOrder(
   items: OrderItem[],
   accessToken: string,
-): Promise<OrderResponse> {
+): Promise<ApiResponse<OrderData>> {
   const res = await fetch(`${API_BASE_URL}/orders/`, {
     method: "POST",
     headers: {
@@ -35,7 +23,7 @@ export async function createOrder(
     },
     body: JSON.stringify(items),
   });
-  const json = await res.json();
-  if (!res.ok) throw new Error(parseError(json));
+  const json: ApiResponse<OrderData> = await res.json().catch(() => ({}));
+  if (!res.ok) throw new ApiError(res.status, json.error ?? "Erreur lors de la commande");
   return json;
 }
