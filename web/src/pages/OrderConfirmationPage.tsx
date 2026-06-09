@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, Navigate } from "react-router";
+import { useLocation, Navigate, Link } from "react-router";
 import { CheckCircle, TreePine } from "lucide-react";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -7,11 +7,7 @@ import { formatPrice } from "../utils/formatters";
 
 export function OrderConfirmationPage() {
   const location = useLocation();
-  const navigate = useNavigate();
   const state = location.state as OrderConfirmationState | null;
-
-  const handleGoToProfile = async () => { await navigate("/profil"); };
-  const handleContinueShopping = async () => { await navigate("/catalog"); };
 
   if (!state?.orderId) {
     return <Navigate to="/" replace />;
@@ -88,18 +84,18 @@ export function OrderConfirmationPage() {
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={handleGoToProfile}
-                className="flex-1 py-3 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors cursor-pointer"
+              <Link
+                to="/profil"
+                className="flex-1 py-3 text-center bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-[var(--radius-btn)] transition-colors"
               >
                 Voir mon profil
-              </button>
-              <button
-                onClick={handleContinueShopping}
-                className="flex-1 py-3 bg-surface-primary hover:bg-surface-tertiary text-content-primary text-sm font-medium rounded-[var(--radius-btn)] transition-colors cursor-pointer"
+              </Link>
+              <Link
+                to="/catalog"
+                className="flex-1 py-3 text-center bg-surface-primary hover:bg-surface-tertiary text-content-primary text-sm font-medium rounded-[var(--radius-btn)] transition-colors"
               >
                 Continuer mes achats
-              </button>
+              </Link>
             </div>
 
           </div>
