@@ -16,6 +16,8 @@ import { AdminTreesPage } from "../pages/AdminTreesPage";
 import { TreeDetailPage } from "../pages/TreeDetailPage";
 import { ScrollToTop } from "../components/shared/ScrollToTop";
 import { NotFoundPage } from "../pages/NotFoundPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import { OrderConfirmationPage } from "../pages/OrderConfirmationPage";
 import { ProtectedRoute } from "../features/auth/ProtectedRoute";
 import { AdminRoute } from "../features/auth/AdminRoute";
 
@@ -58,6 +60,22 @@ export default function App() {
           }
         />
         <Route path="/cart" element={<CartPage />} />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order-confirmation"
+          element={
+            <ProtectedRoute>
+              <OrderConfirmationPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route

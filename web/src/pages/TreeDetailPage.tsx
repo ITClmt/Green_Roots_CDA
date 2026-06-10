@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { ArrowLeft, Leaf, MapPin, Package, Wind } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { Footer } from "../components/layout/Footer";
 import { Header } from "../components/layout/Header";
+import { AddToCartModal } from "../components/cart/AddToCartModal";
 import { useTree } from "../hooks/useTrees";
 
 export function TreeDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: tree, isLoading, error } = useTree(id ?? "");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   /* ── Loading ── */
   if (isLoading) {
@@ -168,6 +171,7 @@ export function TreeDetailPage() {
                   <button
                     id="add-to-cart-btn"
                     disabled={tree.stock === 0}
+                    onClick={() => setIsModalOpen(true)}
                     className="
                       w-full py-3 rounded-xl font-semibold text-sm
                       bg-[#134d37] text-white
@@ -200,6 +204,12 @@ export function TreeDetailPage() {
 
         <Footer />
       </div>
+
+      <AddToCartModal
+        tree={tree}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

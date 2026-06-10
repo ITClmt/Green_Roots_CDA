@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { Link, NavLink } from 'react-router';
 import { useAuth } from '../../features/auth/AuthContext';
+import { useCart } from '../../features/cart/CartContext';
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { totalItems } = useCart();
 
   return (
     <header className=" sticky top-0 z-50 bg-[#F9FAF5] ">
@@ -34,11 +36,16 @@ export function Header() {
         <NavLink
           to="/cart"
           className={({ isActive }) =>
-            `md:hidden transition-colors ${isActive ? "text-[#134d37]" : "text-gray-500 hover:text-[#134d37]"}`
+            `md:hidden relative transition-colors ${isActive ? "text-[#134d37]" : "text-gray-500 hover:text-[#134d37]"}`
           }
-          aria-label="Cart"
+          aria-label={`Panier${totalItems > 0 ? ` (${totalItems} article${totalItems > 1 ? "s" : ""})` : ""}`}
         >
           <ShoppingCart className="w-[18px] h-[18px]" />
+          {totalItems > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+              {totalItems > 99 ? "99+" : totalItems}
+            </span>
+          )}
         </NavLink>
 
         {/* ── DESKTOP layout ── */}
@@ -123,11 +130,16 @@ export function Header() {
         <NavLink
           to="/cart"
           className={({ isActive }) =>
-            `hidden md:block transition-colors ${isActive ? "text-[#134d37]" : "text-gray-500 hover:text-[#134d37]"}`
+            `hidden md:block relative transition-colors ${isActive ? "text-[#134d37]" : "text-gray-500 hover:text-[#134d37]"}`
           }
-          aria-label="Cart"
+          aria-label={`Panier${totalItems > 0 ? ` (${totalItems} article${totalItems > 1 ? "s" : ""})` : ""}`}
         >
           <ShoppingCart className="w-[18px] h-[18px]" />
+          {totalItems > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+              {totalItems > 99 ? "99+" : totalItems}
+            </span>
+          )}
         </NavLink>
       </div>
 

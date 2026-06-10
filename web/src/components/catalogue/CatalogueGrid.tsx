@@ -32,26 +32,29 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
     );
   }
 
-  const allTrees: TreeItem[] = (data?.pages ?? [])
+  const allTrees: Array<{ item: TreeItem; original: Tree }> = (data?.pages ?? [])
     .flatMap((page) => page.data)
     .map((tree: Tree) => ({
-      id: tree.id,
-      name: tree.name,
-      species: tree.species,
-      description: tree.description,
-      location: tree.location ?? "",
-      co2: tree.co2,
-      oxygen: tree.oxygen,
-      price: tree.price,
-      image: tree.imageUrl ?? "",
+      item: {
+        id: tree.id,
+        name: tree.name,
+        species: tree.species,
+        description: tree.description,
+        location: tree.location ?? "",
+        co2: tree.co2,
+        oxygen: tree.oxygen,
+        price: tree.price,
+        image: tree.imageUrl ?? "",
+      },
+      original: tree,
     }));
 
-  const filtered = allTrees.filter((tree) => {
+  const filtered = allTrees.filter(({ item }) => {
     const q = searchQuery.toLowerCase();
     return (
       !q ||
-      tree.name.toLowerCase().includes(q) ||
-      tree.species.toLowerCase().includes(q)
+      item.name.toLowerCase().includes(q) ||
+      item.species.toLowerCase().includes(q)
     );
   });
 
@@ -63,8 +66,8 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
         </div>
       ) : (
         <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((tree) => (
-            <CatalogueCard key={tree.id} tree={tree} />
+          {filtered.map(({ item, original }) => (
+            <CatalogueCard key={item.id} tree={item} originalTree={original} />
           ))}
         </div>
       )}

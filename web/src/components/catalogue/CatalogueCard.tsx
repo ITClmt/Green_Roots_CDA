@@ -1,5 +1,8 @@
-import { MapPin, Leaf, Wind } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useState } from 'react';
+import { MapPin, Leaf, Wind, ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { AddToCartModal } from '../cart/AddToCartModal';
+import type { Tree } from '../../types/tree';
 
 export interface TreeItem {
   id: string;
@@ -15,11 +18,13 @@ export interface TreeItem {
 
 interface CatalogueCardProps {
   tree: TreeItem;
+  originalTree?: Tree;
   onDetails?: (tree: TreeItem) => void;
 }
 
-export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
+export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardProps) {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDetails = () => {
     onDetails?.(tree);
@@ -98,20 +103,45 @@ export function CatalogueCard({ tree, onDetails }: CatalogueCardProps) {
         )}
 
         {/* CTA */}
-        <button
-          id={`details-btn-${tree.id}`}
-          onClick={handleDetails}
-          className="
-            mt-auto w-full py-2.5
-            bg-[#f3f4f1] hover:bg-[#e9ebe5]
-            text-[#1a2f24] text-sm font-medium
-            rounded-xl transition-colors duration-200
-            cursor-pointer
-          "
-        >
-          Voir les détails
-        </button>
+        <div className="mt-auto flex flex-col gap-2">
+          {originalTree && originalTree.stock > 0 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
+              className="
+                w-full py-2.5 flex items-center justify-center gap-1.5
+                bg-primary hover:bg-primary-hover
+                text-white text-sm font-medium
+                rounded-xl transition-colors duration-200
+                cursor-pointer
+              "
+            >
+              <ShoppingCart size={14} />
+              Ajouter au panier
+            </button>
+          )}
+          <button
+            id={`details-btn-${tree.id}`}
+            onClick={handleDetails}
+            className="
+              w-full py-2.5
+              bg-[#f3f4f1] hover:bg-[#e9ebe5]
+              text-[#1a2f24] text-sm font-medium
+              rounded-xl transition-colors duration-200
+              cursor-pointer
+            "
+          >
+            Voir les détails
+          </button>
+        </div>
       </div>
+
+      {originalTree && (
+        <AddToCartModal
+          tree={originalTree}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </article>
   );
 }
