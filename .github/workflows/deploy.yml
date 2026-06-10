@@ -30,8 +30,8 @@ jobs:
           file: ./api/Dockerfile.prod
           push: true
           tags: |
-            ${{ env.REGISTRY }}/o-clock-selkie/projet-green-roots-api:latest
-            ${{ env.REGISTRY }}/o-clock-selkie/projet-green-roots-api:${{ github.sha }}
+            ${{ env.REGISTRY }}/ryzenixx/projet-green-roots-api:latest
+            ${{ env.REGISTRY }}/ryzenixx/projet-green-roots-api:${{ github.sha }}
 
       - name: Build and push Web
         uses: docker/build-push-action@v6
@@ -42,8 +42,8 @@ jobs:
           build-args: |
             VITE_API_URL=/api
           tags: |
-            ${{ env.REGISTRY }}/o-clock-selkie/projet-green-roots-web:latest
-            ${{ env.REGISTRY }}/o-clock-selkie/projet-green-roots-web:${{ github.sha }}
+            ${{ env.REGISTRY }}/ryzenixx/projet-green-roots-web:latest
+            ${{ env.REGISTRY }}/ryzenixx/projet-green-roots-web:${{ github.sha }}
 
       - name: Trigger Portainer redeploy
         env:
