@@ -52,7 +52,7 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
   const imageUrl = useWatch({ control, name: "imageUrl" });
 
   const inputClass =
-    "w-full px-4 py-2 bg-[#E7E9E4] border border-transparent rounded-xl text-sm text-[#1a1c19] placeholder:text-[#9ea89e] focus:outline-none focus:border-[#0f5238] transition-colors";
+    "w-full px-4 py-2 bg-[#E7E9E4] border border-transparent rounded-xl text-sm text-[#1a1c19] placeholder:text-[#9ea89e] focus:outline-none focus:ring-2 focus:ring-[#0f5238]/60 focus:border-[#0f5238] transition-colors";
 
   return (
     <section className="bg-surface-primary rounded-card p-6 shadow-sm border border-gray-200 ">
@@ -76,7 +76,7 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
         className="space-y-3"
       >
         {/* Image */}
-        <Field label="Image (URL)">
+        <Field label="Image (URL)" htmlFor="tree-imageUrl">
           <div className="space-y-2">
             <div className="w-full h-32 border border-border-secondary rounded-xl overflow-hidden bg-surface-tertiary flex items-center justify-center">
               {imageUrl ? (
@@ -87,11 +87,12 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
                   onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
               ) : (
-                <ImagePlus size={24} className="text-content-secondary" />
+                <ImagePlus aria-hidden="true" size={24} className="text-content-secondary" />
               )}
             </div>
             <input
               {...register("imageUrl")}
+              id="tree-imageUrl"
               type="text"
               placeholder="https://example.com/image.jpg"
               className={inputClass}
@@ -100,9 +101,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
         </Field>
 
         {/* Name */}
-        <Field label="Nom" error={errors.name}>
+        <Field label="Nom" htmlFor="tree-name" error={errors.name}>
           <input
             {...register("name")}
+            id="tree-name"
             type="text"
             placeholder="Ex. Chêne pédonculé"
             className={inputClass}
@@ -110,9 +112,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
         </Field>
 
         {/* Species */}
-        <Field label="Espèce" error={errors.species}>
+        <Field label="Espèce" htmlFor="tree-species" error={errors.species}>
           <input
             {...register("species")}
+            id="tree-species"
             type="text"
             placeholder="Ex. Quercus robur"
             className={inputClass}
@@ -120,9 +123,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
         </Field>
 
         {/* Description */}
-        <Field label="Description">
+        <Field label="Description" htmlFor="tree-description">
           <textarea
             {...register("description")}
+            id="tree-description"
             placeholder="Caractéristiques de l'arbre..."
             rows={2}
             className={`${inputClass} resize-none`}
@@ -131,9 +135,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
 
         {/* Price and location */}
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Prix (€)" error={errors.price}>
+          <Field label="Prix (€)" htmlFor="tree-price" error={errors.price}>
             <input
               {...register("price")}
+              id="tree-price"
               type="number"
               placeholder="0.00"
               min="0"
@@ -141,9 +146,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
               className={inputClass}
             />
           </Field>
-          <Field label="Région">
+          <Field label="Région" htmlFor="tree-location">
             <input
               {...register("location")}
+              id="tree-location"
               type="text"
               placeholder="Ex. Europe"
               className={inputClass}
@@ -153,9 +159,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
 
         {/* Stock, CO₂ et O₂ */}
         <div className="grid grid-cols-3 gap-4">
-          <Field label="Stock">
+          <Field label="Stock" htmlFor="tree-stock">
             <input
               {...register("stock")}
+              id="tree-stock"
               type="number"
               placeholder="0"
               min="0"
@@ -163,9 +170,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
               className={inputClass}
             />
           </Field>
-          <Field label="CO₂/an (kg)">
+          <Field label="CO₂/an (kg)" htmlFor="tree-co2">
             <input
               {...register("co2")}
+              id="tree-co2"
               type="number"
               placeholder="0"
               min="0"
@@ -173,9 +181,10 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
               className={inputClass}
             />
           </Field>
-          <Field label="O₂/an (kg)">
+          <Field label="O₂/an (kg)" htmlFor="tree-oxygen">
             <input
               {...register("oxygen")}
+              id="tree-oxygen"
               type="number"
               placeholder="0"
               min="0"

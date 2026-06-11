@@ -12,7 +12,7 @@ interface CheckoutFormProps {
 }
 
 const inputClass =
-  "w-full px-4 py-3 bg-white border border-surface-tertiary rounded-xl text-sm text-content-primary placeholder:text-content-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all";
+  "w-full px-4 py-3 bg-white border border-surface-tertiary rounded-xl text-sm text-content-primary placeholder:text-content-secondary focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary transition-all";
 
 const errorClass = "text-xs text-red-500 mt-1";
 
@@ -52,14 +52,14 @@ export function CheckoutForm({
           Paiement
         </h2>
         <span className="flex items-center gap-1.5 text-xs text-secondary bg-surface-primary px-3 py-1 rounded-full">
-          <ShieldCheck size={13} />
+          <ShieldCheck aria-hidden="true" size={13} />
           Simulation
         </span>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-content-primary">
+          <label htmlFor="checkout-cardNumber" className="text-sm font-medium text-content-primary">
             Numéro de carte
           </label>
           <Controller
@@ -68,10 +68,13 @@ export function CheckoutForm({
             render={({ field }) => (
               <input
                 {...field}
+                id="checkout-cardNumber"
                 type="text"
                 inputMode="numeric"
                 placeholder="4242 4242 4242 4242"
                 maxLength={19}
+                aria-invalid={!!errors.cardNumber}
+                aria-describedby={errors.cardNumber ? "checkout-cardNumber-error" : undefined}
                 className={inputClass}
                 value={field.value ?? ""}
                 onChange={(e) => field.onChange(formatCardNumber(e.target.value))}
@@ -79,13 +82,13 @@ export function CheckoutForm({
             )}
           />
           {errors.cardNumber && (
-            <p className={errorClass}>{errors.cardNumber.message}</p>
+            <p id="checkout-cardNumber-error" role="alert" className={errorClass}>{errors.cardNumber.message}</p>
           )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-content-primary">
+            <label htmlFor="checkout-expiry" className="text-sm font-medium text-content-primary">
               Expiration
             </label>
             <Controller
@@ -94,10 +97,13 @@ export function CheckoutForm({
               render={({ field }) => (
                 <input
                   {...field}
+                  id="checkout-expiry"
                   type="text"
                   inputMode="numeric"
                   placeholder="MM/AA"
                   maxLength={5}
+                  aria-invalid={!!errors.expiry}
+                  aria-describedby={errors.expiry ? "checkout-expiry-error" : undefined}
                   className={inputClass}
                   value={field.value ?? ""}
                   onChange={(e) => field.onChange(formatExpiry(e.target.value))}
@@ -105,45 +111,51 @@ export function CheckoutForm({
               )}
             />
             {errors.expiry && (
-              <p className={errorClass}>{errors.expiry.message}</p>
+              <p id="checkout-expiry-error" role="alert" className={errorClass}>{errors.expiry.message}</p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-content-primary">
+            <label htmlFor="checkout-cvv" className="text-sm font-medium text-content-primary">
               CVV
             </label>
             <input
+              id="checkout-cvv"
               type="password"
               placeholder="•••"
               inputMode="numeric"
               maxLength={4}
+              aria-invalid={!!errors.cvv}
+              aria-describedby={errors.cvv ? "checkout-cvv-error" : undefined}
               className={inputClass}
               {...register("cvv")}
             />
             {errors.cvv && (
-              <p className={errorClass}>{errors.cvv.message}</p>
+              <p id="checkout-cvv-error" role="alert" className={errorClass}>{errors.cvv.message}</p>
             )}
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-content-primary">
+          <label htmlFor="checkout-cardHolder" className="text-sm font-medium text-content-primary">
             Titulaire
           </label>
           <input
+            id="checkout-cardHolder"
             type="text"
             placeholder="Jean Dupont"
+            aria-invalid={!!errors.cardHolder}
+            aria-describedby={errors.cardHolder ? "checkout-cardHolder-error" : undefined}
             className={inputClass}
             {...register("cardHolder")}
           />
           {errors.cardHolder && (
-            <p className={errorClass}>{errors.cardHolder.message}</p>
+            <p id="checkout-cardHolder-error" role="alert" className={errorClass}>{errors.cardHolder.message}</p>
           )}
         </div>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
             {error.message}
           </p>
         )}
@@ -155,12 +167,12 @@ export function CheckoutForm({
         >
           {isPending ? (
             <>
-              <Loader2 size={16} className="animate-spin" />
+              <Loader2 aria-hidden="true" size={16} className="animate-spin" />
               Validation en cours…
             </>
           ) : (
             <>
-              <Lock size={16} />
+              <Lock aria-hidden="true" size={16} />
               Valider la commande · {formatPrice(totalPrice)}
             </>
           )}

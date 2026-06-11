@@ -35,8 +35,8 @@ export function LoginPage() {
   const inputClass = (hasError: boolean) =>
     `w-full px-4 py-3 bg-white border rounded-xl text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all ${
       hasError
-        ? "border-red-400 focus:ring-red-200"
-        : "border-gray-200 focus:ring-primary/20 focus:border-primary"
+        ? "border-red-400 focus:ring-red-300"
+        : "border-gray-200 focus:ring-primary/60 focus:border-primary"
     }`;
 
   return (
@@ -46,33 +46,39 @@ export function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Email</label>
+            <label htmlFor="login-email" className="text-sm font-medium">Email</label>
             <input
+              id="login-email"
               type="email"
               placeholder="jean@exemple.fr"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "login-email-error" : undefined}
               className={inputClass(!!errors.email)}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs text-red-500">{errors.email.message}</p>
+              <p id="login-email-error" role="alert" className="text-xs text-red-500">{errors.email.message}</p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Mot de passe</label>
+            <label htmlFor="login-password" className="text-sm font-medium">Mot de passe</label>
             <input
+              id="login-password"
               type="password"
               placeholder="••••••••"
+              aria-invalid={!!errors.password}
+              aria-describedby={errors.password ? "login-password-error" : undefined}
               className={inputClass(!!errors.password)}
               {...register("password")}
             />
             {errors.password && (
-              <p className="text-xs text-red-500">{errors.password.message}</p>
+              <p id="login-password-error" role="alert" className="text-xs text-red-500">{errors.password.message}</p>
             )}
           </div>
 
           {serverError && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+            <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
               {serverError}
             </p>
           )}
