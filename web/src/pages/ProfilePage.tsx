@@ -1,19 +1,14 @@
 import { Link } from 'react-router';
 import { Leaf, Plus } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { BadgeCard } from '../components/profile/BadgeCard';
 import { OrderItem } from '../components/profile/OrderItem';
-import type { UserProfile, BadgeData, OrderData } from '../types/profile';
+import { useAuth } from '../features/auth/AuthContext';
+import { getUserOrders } from '../api/orders';
+import type { BadgeData, OrderData } from '../types/profile';// ── Mock data ─────────────────────────────────────────────────────────────────
 
-// ── Mock data ─────────────────────────────────────────────────────────────────
-
-const USER: UserProfile = {
-  id: 'user-1',
-  firstName: 'Jacky',
-  lastName: 'Chak',
-  treesPlanted: 12,
-};
 
 const BADGES: BadgeData[] = [
   {
@@ -30,36 +25,36 @@ const BADGES: BadgeData[] = [
   },
 ];
 
-const ORDERS: OrderData[] = [
-  {
-    id: 'order-1',
-    name: 'Oak Trees',
-    quantity: 5,
-    createdAt: '12 oct 2023',
-    location: 'Amazon Rainforest',
-    iconVariant: 'pine',
-  },
-  {
-    id: 'order-2',
-    name: 'Mangroves',
-    quantity: 7,
-    createdAt: '04 août 2023',
-    location: 'Madagascar Coast',
-    iconVariant: 'sprout',
-  },
-  {
-    id: 'order-3',
-    name: 'Welcome Sapling',
-    quantity: 1,
-    createdAt: '15 janv 2023',
-    location: 'Local Reserve',
-    iconVariant: 'leaf',
-  },
-];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export function ProfilePage() {
+  const { user, accessToken } = useAuth();
+
+  const { data: ordersResponse, isLoading } = useQuery({
+    queryKey: ['userOrders'],
+    queryFn: () => getUserOrders(accessToken!),
+    enabled: !!accessToken,
+  });
+
+  const rawOrders = ordersResponse?.data || [];
+  const treesPlanted = rawOrders.reduce((sum, order) => sum + order.quantity, 0);
+
+  const ordersList: OrderData[] = rawOrders.map((order: any) => ({
+    id: order.id,
+    name: order.name,
+    quantity: order.quantity,
+    createdAt: new Date(order.createdAt).toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }),
+    location: order.location || 'Local Reserve',
+    iconVariant: ['pine', 'sprout', 'leaf'].includes(order.species) ? order.species : 'leaf',
+  }));
+
+  if (!user) return null;
+
   return (
     <div className="min-h-screen bg-surface-secondary">
       <div className="max-w-[1440px] mx-auto">
@@ -72,7 +67,7 @@ export function ProfilePage() {
             <div className="flex flex-col gap-6">
 
               <h1 className="text-3xl font-bold text-content-primary">
-                {USER.firstName} {USER.lastName}
+                {user.firstName} {user.lastName}
               </h1>
 
               {/* Impact card */}
@@ -84,7 +79,7 @@ export function ProfilePage() {
                   </span>
                 </div>
                 <p className="text-5xl font-bold leading-none text-white">
-                  {USER.treesPlanted} arbres
+                  {isLoading ? '...' : treesPlanted} arbres
                 </p>
                 <p className="text-sm text-white/65 leading-relaxed mt-3">
                   plantés dans le cadre de projets mondiaux de reboisement.
@@ -111,9 +106,15 @@ export function ProfilePage() {
                   Historique des commandes
                 </h2>
                 <div className="flex flex-col gap-3">
-                  {ORDERS.map((order) => (
-                    <OrderItem key={order.id} order={order} />
-                  ))}
+                  {isLoading ? (
+                    <p className="text-sm text-content-secondary">Chargement de vos commandes...</p>
+                  ) : ordersList.length > 0 ? (
+                    ordersList.map((order) => (
+                      <OrderItem key={order.id} order={order} />
+                    ))
+                  ) : (
+                    <p className="text-sm text-content-secondary">Vous n'avez pas encore passé de commande.</p>
+                  )}
                 </div>
               </section>
 

@@ -2,7 +2,7 @@ import { db } from "@/db/client";
 import { orders, orderItems, trees } from "@/db/schema";
 import type { CheckoutDto } from "@/models/order";
 import { NotFoundError, ConflictError, InternalError } from "@/utils/errors";
-import { sql, inArray } from "drizzle-orm";
+import { sql, inArray, eq, desc } from "drizzle-orm";
 
 type Tree = typeof trees.$inferSelect;
 
@@ -55,5 +55,24 @@ export const orderService = {
 
       return { orderId: order.id };
     });
+  },
+
+  async findUserOrderItems(userId: string) {
+    const items = await db
+      .select({
+        id: orderItems.id,
+        name: trees.name,
+        quantity: orderItems.quantity,
+        createdAt: orders.createdAt,
+        location: trees.location,
+        species: trees.species,
+      })
+      .from(orderItems)
+      .innerJoin(orders, eq(orders.id, orderItems.orderId))
+      .innerJoin(trees, eq(trees.id, orderItems.treeId))
+      .where(eq(orders.userId, userId))
+      .orderBy(desc(orders.createdAt));
+
+    return items;
   },
 };
