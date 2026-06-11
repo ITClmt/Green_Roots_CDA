@@ -123,25 +123,25 @@ export function TreeDetailPage() {
               {/* Stats grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
                 <StatCard
-                  icon={<Leaf size={20} className="text-[#134d37]" />}
+                  icon={<Leaf aria-hidden="true" size={20} className="text-[#134d37]" />}
                   label="CO₂ absorbé"
                   value={`~${tree.co2} kg/an`}
                   bg="bg-green-50"
                 />
                 <StatCard
-                  icon={<Wind size={20} className="text-blue-500" />}
+                  icon={<Wind aria-hidden="true" size={20} className="text-blue-500" />}
                   label="O₂ produit"
                   value={`${tree.oxygen} kg/an`}
                   bg="bg-blue-50"
                 />
                 <StatCard
-                  icon={<MapPin size={20} className="text-amber-500" />}
+                  icon={<MapPin aria-hidden="true" size={20} className="text-amber-500" />}
                   label="Région"
                   value={tree.location ?? "—"}
                   bg="bg-amber-50"
                 />
                 <StatCard
-                  icon={<Package size={20} className="text-purple-500" />}
+                  icon={<Package aria-hidden="true" size={20} className="text-purple-500" />}
                   label="En stock"
                   value={`${tree.stock} unités`}
                   bg="bg-purple-50"
@@ -220,7 +220,7 @@ function StatCard({
   return (
     <div className={`${bg} rounded-2xl p-4 flex flex-col gap-2`}>
       {icon}
-      <p className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+      <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">
         {label}
       </p>
       <p className="text-sm font-bold text-[#1a2f24]">{value}</p>

@@ -76,19 +76,19 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
         <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
           {tree.location && (
             <span className="flex items-center gap-1">
-              <MapPin size={11} className="text-[#134d37]" />
+              <MapPin aria-hidden="true" size={11} className="text-[#134d37]" />
               {tree.location}
             </span>
           )}
           <span className="flex items-center gap-2 ml-auto">
             {tree.co2 > 0 && (
               <span className="flex items-center gap-1">
-                <Leaf size={11} className="text-[#134d37]" />~{tree.co2}kg CO₂
+                <Leaf aria-hidden="true" size={11} className="text-[#134d37]" />~{tree.co2}kg CO₂
               </span>
             )}
             {tree.oxygen > 0 && (
               <span className="flex items-center gap-1">
-                <Wind size={11} className="text-blue-400" />
+                <Wind aria-hidden="true" size={11} className="text-blue-400" />
                 {tree.oxygen}kg O₂
               </span>
             )}

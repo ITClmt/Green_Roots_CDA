@@ -14,7 +14,7 @@ export function FeaturedSpecies() {
       <div className="flex justify-between items-end mb-8 px-5 sm:px-8 md:px-16">
         <h2 className="text-3xl font-bold text-[#1a2f24]">Espèces Phares</h2>
         <Link to="/catalog" className="flex items-center text-[#134d37] font-medium hover:underline text-sm">
-          Tout voir <ArrowRight className="w-4 h-4 ml-1" />
+          Tout voir <ArrowRight aria-hidden="true" className="w-4 h-4 ml-1" />
         </Link>
       </div>
 
@@ -26,7 +26,14 @@ export function FeaturedSpecies() {
         <>
           {/* Mobile & Tablet: horizontal scroll carousel */}
           <div
-            className="lg:hidden flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-5 sm:px-8 pb-4"
+            role="region"
+            aria-label="Espèces phares"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowRight') (e.currentTarget as HTMLElement).scrollBy({ left: 300, behavior: 'smooth' });
+              if (e.key === 'ArrowLeft') (e.currentTarget as HTMLElement).scrollBy({ left: -300, behavior: 'smooth' });
+            }}
+            className="lg:hidden flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-5 sm:px-8 pb-4 focus:outline-none focus:ring-2 focus:ring-[#134d37]/60"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {featured.map((tree) => (

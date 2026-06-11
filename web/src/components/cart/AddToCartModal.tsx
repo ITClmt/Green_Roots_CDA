@@ -94,7 +94,11 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
               >
                 <Minus size={14} />
               </button>
-              <span className="w-8 text-center text-sm font-bold text-content-primary">
+              <span
+                aria-live="polite"
+                aria-atomic="true"
+                className="w-8 text-center text-sm font-bold text-content-primary"
+              >
                 {quantity}
               </span>
               <button
