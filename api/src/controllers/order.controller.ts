@@ -18,4 +18,10 @@ export const orderController = new Elysia({ prefix: `${API_BASE}/orders` })
       return ok(result, "Order created succesfully");
     },
     { body: checkoutSchema }
-  );
+  )
+  
+  .get("/", async ({ user }) => {
+    if (!user?.sub || typeof user.sub !== "string") throw new UnauthorizedError();
+    const items = await orderService.findUserOrderItems(user.sub);
+    return ok(items, "User orders retrieved successfully");
+  });

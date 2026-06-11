@@ -36,6 +36,7 @@ services:
       - api
     volumes:
       - ./web/src:/app/src
+      - ./web/public:/app/public
     ports:
       - "5173:5173"
     restart: unless-stopped
