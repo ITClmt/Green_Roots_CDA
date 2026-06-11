@@ -1,4 +1,13 @@
-import { pgTable, pgEnum, uuid, text, timestamp, integer, numeric, decimal } from "drizzle-orm/pg-core";
+import {
+  decimal,
+  integer,
+  numeric,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { timestamps } from "./helpers";
 
 export const roleEnum = pgEnum("role", ["USER", "ADMIN"]);
@@ -19,9 +28,14 @@ export const refreshTokens = pgTable("refresh_tokens", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   tokenHash: text("token_hash").notNull().unique(),
-  expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
+  expiresAt: timestamp("expires_at", {
+    mode: "date",
+    withTimezone: true,
+  }).notNull(),
   rotatedAt: timestamp("rotated_at", { mode: "date", withTimezone: true }),
-  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export const trees = pgTable("trees", {
@@ -31,8 +45,12 @@ export const trees = pgTable("trees", {
   description: text("description"),
   location: text("location"),
   co2: integer("co2").notNull().default(0),
-  oxygen:integer("oxygen").notNull().default(0),
-  price: numeric("price", { precision: 10, scale: 2, mode: "number" }).notNull(),
+  oxygen: integer("oxygen").notNull().default(0),
+  price: numeric("price", {
+    precision: 10,
+    scale: 2,
+    mode: "number",
+  }).notNull(),
   imageUrl: text("image_url"),
   stock: integer("stock").notNull().default(0),
   ...timestamps,
@@ -45,7 +63,7 @@ export const orders = pgTable("orders", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  totalAmount: decimal("total_amount") .notNull(),
+  totalAmount: decimal("total_amount").notNull(),
   status: status("status").notNull().default("PENDING"),
   ...timestamps,
 });
