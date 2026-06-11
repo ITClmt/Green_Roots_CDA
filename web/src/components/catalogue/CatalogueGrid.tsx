@@ -18,7 +18,7 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
 
   if (isLoading) {
     return (
-      <div role="status" aria-live="polite" className="flex justify-center items-center py-24 text-gray-400 text-sm">
+      <div role="status" aria-live="polite" className="flex justify-center items-center py-24 text-gray-500 text-sm">
         Chargement du catalogue…
       </div>
     );
@@ -61,7 +61,7 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
   return (
     <section id="catalogue-grid">
       {filtered.length === 0 ? (
-        <div className="text-center py-20 text-gray-400 text-sm">
+        <div className="text-center py-20 text-gray-500 text-sm">
           Aucun arbre ne correspond à votre recherche.
         </div>
       ) : (

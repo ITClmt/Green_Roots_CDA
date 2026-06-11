@@ -121,7 +121,7 @@ export function RegisterPage() {
               className={inputClass(errors.password)}
               {...register("password")}
             />
-            <p id="register-password-hint" className="text-xs text-gray-400">
+            <p id="register-password-hint" className="text-xs text-gray-500">
               8 caractères minimum
             </p>
             {errors.password && (

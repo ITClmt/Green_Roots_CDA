@@ -67,7 +67,7 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
           <h3 className="text-base font-bold text-[#1a2f24] leading-tight">
             {tree.name}
           </h3>
-          <p className="text-xs text-gray-400 mt-0.5 italic">
+          <p className="text-xs text-gray-500 mt-0.5 italic">
             {tree.species}
           </p>
         </div>
@@ -97,7 +97,7 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
 
         {/* Description */}
         {tree.description && (
-          <p className="text-xs text-gray-400 leading-snug line-clamp-2">
+          <p className="text-xs text-content-secondary leading-snug line-clamp-2">
             {tree.description}
           </p>
         )}

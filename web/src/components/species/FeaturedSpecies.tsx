@@ -19,7 +19,7 @@ export function FeaturedSpecies() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-12 text-gray-400 text-sm">
+        <div className="flex justify-center py-12 text-gray-500 text-sm">
           Chargement...
         </div>
       ) : (

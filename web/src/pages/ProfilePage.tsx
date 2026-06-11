@@ -65,15 +65,15 @@ export function ProfilePage() {
           {/* Impact card */}
           <div className="rounded-2xl bg-primary text-white p-6">
             <div className="flex items-center gap-1.5 mb-5">
-                  <Leaf aria-hidden="true" size={13} className="text-white/70" />
-                  <span className="text-xs font-semibold uppercase tracking-widest text-white/70">
+                  <Leaf aria-hidden="true" size={13} className="text-white/85" />
+                  <span className="text-xs font-semibold uppercase tracking-widest text-white/85">
                 Impact dans le monde
               </span>
             </div>
             <p className="text-5xl font-bold leading-none text-white">
               {isLoading ? "..." : treesPlanted} arbres
             </p>
-            <p className="text-sm text-white/65 leading-relaxed mt-3">
+            <p className="text-sm text-white/80 leading-relaxed mt-3">
               plantés dans le cadre de projets mondiaux de reboisement.
             </p>
           </div>
