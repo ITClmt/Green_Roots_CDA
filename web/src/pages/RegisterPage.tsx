@@ -59,6 +59,7 @@ export function RegisterPage() {
               <input
                 id="register-firstName"
                 type="text"
+                autoComplete="given-name"
                 placeholder="Jean"
                 aria-invalid={!!errors.firstName}
                 aria-describedby={errors.firstName ? "register-firstName-error" : undefined}
@@ -76,6 +77,7 @@ export function RegisterPage() {
               <input
                 id="register-lastName"
                 type="text"
+                autoComplete="family-name"
                 placeholder="Dupont"
                 aria-invalid={!!errors.lastName}
                 aria-describedby={errors.lastName ? "register-lastName-error" : undefined}
@@ -95,6 +97,7 @@ export function RegisterPage() {
             <input
               id="register-email"
               type="email"
+              autoComplete="email"
               placeholder="jean@exemple.fr"
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "register-email-error" : undefined}
@@ -111,6 +114,7 @@ export function RegisterPage() {
             <input
               id="register-password"
               type="password"
+              autoComplete="new-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
               aria-describedby={errors.password ? "register-password-error" : "register-password-hint"}

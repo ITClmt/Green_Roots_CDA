@@ -50,6 +50,7 @@ export function LoginPage() {
             <input
               id="login-email"
               type="email"
+              autoComplete="email"
               placeholder="jean@exemple.fr"
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "login-email-error" : undefined}
@@ -66,6 +67,7 @@ export function LoginPage() {
             <input
               id="login-password"
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
               aria-describedby={errors.password ? "login-password-error" : undefined}

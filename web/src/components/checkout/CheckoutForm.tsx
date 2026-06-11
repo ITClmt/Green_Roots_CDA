@@ -71,6 +71,7 @@ export function CheckoutForm({
                 id="checkout-cardNumber"
                 type="text"
                 inputMode="numeric"
+                autoComplete="cc-number"
                 placeholder="4242 4242 4242 4242"
                 maxLength={19}
                 aria-invalid={!!errors.cardNumber}
@@ -100,6 +101,7 @@ export function CheckoutForm({
                   id="checkout-expiry"
                   type="text"
                   inputMode="numeric"
+                  autoComplete="cc-exp"
                   placeholder="MM/AA"
                   maxLength={5}
                   aria-invalid={!!errors.expiry}
@@ -122,8 +124,9 @@ export function CheckoutForm({
             <input
               id="checkout-cvv"
               type="password"
-              placeholder="•••"
               inputMode="numeric"
+              autoComplete="cc-csc"
+              placeholder="•••"
               maxLength={4}
               aria-invalid={!!errors.cvv}
               aria-describedby={errors.cvv ? "checkout-cvv-error" : undefined}
@@ -143,6 +146,7 @@ export function CheckoutForm({
           <input
             id="checkout-cardHolder"
             type="text"
+            autoComplete="cc-name"
             placeholder="Jean Dupont"
             aria-invalid={!!errors.cardHolder}
             aria-describedby={errors.cardHolder ? "checkout-cardHolder-error" : undefined}
