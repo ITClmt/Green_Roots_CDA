@@ -27,5 +27,4 @@ export interface OrderData {
   quantity: number;
   createdAt: string;
   location: string;
-  iconVariant: "pine" | "sprout" | "leaf";
 }

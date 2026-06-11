@@ -1,14 +1,10 @@
-import { API_BASE_URL } from "../utils/constant";
-import { ApiError } from "../utils/ApiError";
-import type { ApiResponse } from "../types/tree";
 import type { OrderData } from "../types/profile";
+import type { ApiResponse } from "../types/tree";
+import { ApiError } from "../utils/ApiError";
+import { API_BASE_URL } from "../utils/constant";
 export interface OrderItem {
   tree_id: string;
   quantity: number;
-}
-
-interface OrderData {
-  orderId: string;
 }
 
 export async function createOrder(
@@ -24,7 +20,8 @@ export async function createOrder(
     body: JSON.stringify(items),
   });
   const json: ApiResponse<OrderData> = await res.json().catch(() => ({}));
-  if (!res.ok) throw new ApiError(res.status, json.error ?? "Erreur lors de la commande");
+  if (!res.ok)
+    throw new ApiError(res.status, json.error ?? "Erreur lors de la commande");
   return json;
 }
 
@@ -38,6 +35,10 @@ export async function getUserOrders(
     },
   });
   const json: ApiResponse<OrderData[]> = await res.json().catch(() => ({}));
-  if (!res.ok) throw new ApiError(res.status, json.error ?? "Erreur lors de la récupération des commandes");
+  if (!res.ok)
+    throw new ApiError(
+      res.status,
+      json.error ?? "Erreur lors de la récupération des commandes",
+    );
   return json;
 }
