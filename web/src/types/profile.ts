@@ -25,6 +25,6 @@ export interface OrderData {
   id: string;
   name: string;
   quantity: number;
-  createdAt: string;
+  createdAt: Date;
   location: string;
 }
