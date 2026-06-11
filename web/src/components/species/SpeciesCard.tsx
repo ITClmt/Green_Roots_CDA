@@ -30,6 +30,7 @@ export function SpeciesCard({ id, country, name, desc, image }: SpeciesCardProps
         <p className="text-sm text-gray-500 mb-6 line-clamp-2">{desc}</p>
         <button
           onClick={() => navigate(`/catalog/${id}`)}
+          aria-label={`Voir les détails de ${name}`}
           className="w-full py-3 bg-[#f3f4f1] hover:bg-[#e9ebe5] cursor-pointer text-[#1a2f24] font-medium rounded-xl transition-colors"
         >
           Voir les détails

@@ -107,6 +107,7 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
           {originalTree && originalTree.stock > 0 && (
             <button
               onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
+              aria-label={`Ajouter ${tree.name} au panier`}
               className="
                 w-full py-2.5 flex items-center justify-center gap-1.5
                 bg-primary hover:bg-primary-hover
@@ -115,13 +116,14 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
                 cursor-pointer
               "
             >
-              <ShoppingCart size={14} />
+              <ShoppingCart aria-hidden="true" size={14} />
               Ajouter au panier
             </button>
           )}
           <button
             id={`details-btn-${tree.id}`}
             onClick={handleDetails}
+            aria-label={`Voir les détails de ${tree.name}`}
             className="
               w-full py-2.5
               bg-[#f3f4f1] hover:bg-[#e9ebe5]
