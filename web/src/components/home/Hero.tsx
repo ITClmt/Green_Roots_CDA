@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 export function Hero() {
   return (
     <section className="relative w-full h-[80vh] min-h-[400px] max-h-[700px] flex items-end pb-12 sm:items-center sm:pb-0 overflow-hidden">
@@ -21,9 +23,12 @@ export function Hero() {
             biodiversité et laissez une empreinte durable sur la planète, arbre
             par arbre.
           </p>
-          <button className="bg-[#0f5238] cursor-pointer hover:bg-[#0f3d2c] text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-colors shadow-lg shadow-[#134d37]/20">
+          <Link
+            to="/catalog"
+            className="bg-primary cursor-pointer hover:bg-[#0f3d2c] text-white px-6 sm:px-8 py-3 rounded-full font-medium transition-colors shadow-lg shadow-[#134d37]/20"
+          >
             Voir les arbres
-          </button>
+          </Link>
         </div>
       </div>
     </section>

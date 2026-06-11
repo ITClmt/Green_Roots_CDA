@@ -52,7 +52,7 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
   const imageUrl = useWatch({ control, name: "imageUrl" });
 
   const inputClass =
-    "w-full px-4 py-3 bg-[#E7E9E4] border border-transparent rounded-xl text-sm text-[#1a1c19] placeholder:text-[#9ea89e] focus:outline-none focus:border-[#0f5238] transition-colors";
+    "w-full px-4 py-2 bg-[#E7E9E4] border border-transparent rounded-xl text-sm text-[#1a1c19] placeholder:text-[#9ea89e] focus:outline-none focus:border-[#0f5238] transition-colors";
 
   return (
     <section className="bg-surface-primary rounded-card p-6 shadow-sm border border-gray-200 ">
@@ -73,12 +73,12 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
             });
           }
         })}
-        className="space-y-4"
+        className="space-y-3"
       >
         {/* Image */}
         <Field label="Image (URL)">
           <div className="space-y-2">
-            <div className="w-full h-48 border border-border-secondary rounded-xl overflow-hidden bg-surface-tertiary flex items-center justify-center">
+            <div className="w-full h-32 border border-border-secondary rounded-xl overflow-hidden bg-surface-tertiary flex items-center justify-center">
               {imageUrl ? (
                 <img
                   src={imageUrl}
@@ -124,7 +124,7 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
           <textarea
             {...register("description")}
             placeholder="Caractéristiques de l'arbre..."
-            rows={3}
+            rows={2}
             className={`${inputClass} resize-none`}
           />
         </Field>
@@ -192,14 +192,14 @@ export function TreeFormSection({ editingTree, onCancel }: Props) {
               reset(emptyValues);
               onCancel();
             }}
-            className="flex-1 py-3 rounded-btn border border-border-secondary text-sm font-medium text-content-secondary hover:bg-surface-tertiary transition-colors cursor-pointer"
+            className="flex-1 py-2 rounded-btn border border-border-secondary text-sm font-medium text-content-secondary hover:bg-surface-tertiary transition-colors cursor-pointer"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={createTree.isPending || updateTree.isPending}
-            className="flex-1 py-3 rounded-btn bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 py-2 rounded-btn bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {createTree.isPending || updateTree.isPending
               ? "Enregistrement..."

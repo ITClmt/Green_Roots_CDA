@@ -1,6 +1,7 @@
 // ── Layout ────────────────────────────────────────────
 export { Header } from './layout/Header';
 export { Footer } from './layout/Footer';
+export { MainLayout } from './layout/MainLayout';
 
 // ── Home ──────────────────────────────────────────────
 export { Hero } from './home/Hero';
