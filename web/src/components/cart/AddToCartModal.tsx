@@ -49,7 +49,7 @@ export function AddToCartModal({ tree, isOpen, onClose }: AddToCartModalProps) {
       <div className="flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-surface-tertiary">
-        <h2 id="modal-title" className="text-base font-semibold text-content-primary">
+        <h2 id="modal-title" aria-live="polite" aria-atomic="true" className="text-base font-semibold text-content-primary">
           {step === "select" ? "Ajouter au panier" : "Ajouté au panier !"}
         </h2>
         <button

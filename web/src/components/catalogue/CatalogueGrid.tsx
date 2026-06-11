@@ -18,15 +18,15 @@ export function CatalogueGrid({ searchQuery }: CatalogueGridProps) {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center py-24 text-gray-400 text-sm">
-        Chargement du catalogue...
+      <div role="status" aria-live="polite" className="flex justify-center items-center py-24 text-gray-400 text-sm">
+        Chargement du catalogue…
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center py-24 text-red-400 text-sm">
+      <div role="alert" className="flex justify-center items-center py-24 text-red-400 text-sm">
         Erreur : {error.message}
       </div>
     );
