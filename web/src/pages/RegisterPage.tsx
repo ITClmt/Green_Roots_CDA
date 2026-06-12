@@ -43,8 +43,8 @@ export function RegisterPage() {
   const inputClass = (error?: { message?: string }) =>
     `w-full px-4 py-3 bg-white border rounded-xl text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all ${
       error
-        ? "border-red-400 focus:ring-red-200"
-        : "border-gray-200 focus:ring-primary/20 focus:border-primary"
+        ? "border-red-400 focus:ring-red-300"
+        : "border-gray-200 focus:ring-primary/60 focus:border-primary"
     }`;
 
   return (
@@ -55,29 +55,37 @@ export function RegisterPage() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Prénom</label>
+              <label htmlFor="register-firstName" className="text-sm font-medium">Prénom</label>
               <input
+                id="register-firstName"
                 type="text"
+                autoComplete="given-name"
                 placeholder="Jean"
+                aria-invalid={!!errors.firstName}
+                aria-describedby={errors.firstName ? "register-firstName-error" : undefined}
                 className={inputClass(errors.firstName)}
                 {...register("firstName")}
               />
               {errors.firstName && (
-                <p className="text-xs text-red-500">
+                <p id="register-firstName-error" role="alert" className="text-xs text-red-500">
                   {errors.firstName.message}
                 </p>
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Nom</label>
+              <label htmlFor="register-lastName" className="text-sm font-medium">Nom</label>
               <input
+                id="register-lastName"
                 type="text"
+                autoComplete="family-name"
                 placeholder="Dupont"
+                aria-invalid={!!errors.lastName}
+                aria-describedby={errors.lastName ? "register-lastName-error" : undefined}
                 className={inputClass(errors.lastName)}
                 {...register("lastName")}
               />
               {errors.lastName && (
-                <p className="text-xs text-red-500">
+                <p id="register-lastName-error" role="alert" className="text-xs text-red-500">
                   {errors.lastName.message}
                 </p>
               )}
@@ -85,33 +93,44 @@ export function RegisterPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Email</label>
+            <label htmlFor="register-email" className="text-sm font-medium">Email</label>
             <input
+              id="register-email"
               type="email"
+              autoComplete="email"
               placeholder="jean@exemple.fr"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "register-email-error" : undefined}
               className={inputClass(errors.email)}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-xs text-red-500">{errors.email.message}</p>
+              <p id="register-email-error" role="alert" className="text-xs text-red-500">{errors.email.message}</p>
             )}
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium">Mot de passe</label>
+            <label htmlFor="register-password" className="text-sm font-medium">Mot de passe</label>
             <input
+              id="register-password"
               type="password"
-              placeholder="8 caractères minimum"
+              autoComplete="new-password"
+              placeholder="••••••••"
+              aria-invalid={!!errors.password}
+              aria-describedby={errors.password ? "register-password-error" : "register-password-hint"}
               className={inputClass(errors.password)}
               {...register("password")}
             />
+            <p id="register-password-hint" className="text-xs text-gray-500">
+              8 caractères minimum
+            </p>
             {errors.password && (
-              <p className="text-xs text-red-500">{errors.password.message}</p>
+              <p id="register-password-error" role="alert" className="text-xs text-red-500">{errors.password.message}</p>
             )}
           </div>
 
           {serverError && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+            <p role="alert" className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
               {serverError}
             </p>
           )}

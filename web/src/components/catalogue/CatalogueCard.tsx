@@ -67,7 +67,7 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
           <h3 className="text-base font-bold text-[#1a2f24] leading-tight">
             {tree.name}
           </h3>
-          <p className="text-xs text-gray-400 mt-0.5 italic">
+          <p className="text-xs text-gray-500 mt-0.5 italic">
             {tree.species}
           </p>
         </div>
@@ -76,19 +76,19 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
         <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
           {tree.location && (
             <span className="flex items-center gap-1">
-              <MapPin size={11} className="text-[#134d37]" />
+              <MapPin aria-hidden="true" size={11} className="text-[#134d37]" />
               {tree.location}
             </span>
           )}
           <span className="flex items-center gap-2 ml-auto">
             {tree.co2 > 0 && (
               <span className="flex items-center gap-1">
-                <Leaf size={11} className="text-[#134d37]" />~{tree.co2}kg CO₂
+                <Leaf aria-hidden="true" size={11} className="text-[#134d37]" />~{tree.co2}kg CO₂
               </span>
             )}
             {tree.oxygen > 0 && (
               <span className="flex items-center gap-1">
-                <Wind size={11} className="text-blue-400" />
+                <Wind aria-hidden="true" size={11} className="text-blue-400" />
                 {tree.oxygen}kg O₂
               </span>
             )}
@@ -97,7 +97,7 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
 
         {/* Description */}
         {tree.description && (
-          <p className="text-xs text-gray-400 leading-snug line-clamp-2">
+          <p className="text-xs text-content-secondary leading-snug line-clamp-2">
             {tree.description}
           </p>
         )}
@@ -107,6 +107,7 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
           {originalTree && originalTree.stock > 0 && (
             <button
               onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
+              aria-label={`Ajouter ${tree.name} au panier`}
               className="
                 w-full py-2.5 flex items-center justify-center gap-1.5
                 bg-primary hover:bg-primary-hover
@@ -115,13 +116,14 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
                 cursor-pointer
               "
             >
-              <ShoppingCart size={14} />
+              <ShoppingCart aria-hidden="true" size={14} />
               Ajouter au panier
             </button>
           )}
           <button
             id={`details-btn-${tree.id}`}
             onClick={handleDetails}
+            aria-label={`Voir les détails de ${tree.name}`}
             className="
               w-full py-2.5
               bg-[#f3f4f1] hover:bg-[#e9ebe5]

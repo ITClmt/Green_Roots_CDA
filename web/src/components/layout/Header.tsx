@@ -18,8 +18,10 @@ export function Header() {
         {/* Hamburger - left, mobile only */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           className="md:hidden text-[#134d37] p-1 rounded-md hover:bg-gray-100 transition-colors"
-          aria-label="Toggle menu"
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -42,7 +44,7 @@ export function Header() {
         >
           <ShoppingCart className="w-[18px] h-[18px]" />
           {totalItems > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+            <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
               {totalItems > 99 ? "99+" : totalItems}
             </span>
           )}
@@ -136,7 +138,7 @@ export function Header() {
         >
           <ShoppingCart className="w-[18px] h-[18px]" />
           {totalItems > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+            <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
               {totalItems > 99 ? "99+" : totalItems}
             </span>
           )}
@@ -145,6 +147,8 @@ export function Header() {
 
       {/* Mobile dropdown menu */}
       <nav
+        id="mobile-nav"
+        {...(!menuOpen ? { inert: true } : {})}
         className={`md:hidden flex flex-col bg-white border-t border-gray-100 px-5 overflow-hidden transition-all duration-300 ease-in-out ${
           menuOpen ? "max-h-40 py-2" : "max-h-0 py-0"
         }`}

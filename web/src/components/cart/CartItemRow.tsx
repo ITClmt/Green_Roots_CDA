@@ -40,7 +40,11 @@ export function CartItemRow({ item }: CartItemRowProps) {
             <Minus size={14} className="text-content-primary" />
           </button>
 
-          <span className="w-6 text-center text-sm font-semibold text-content-primary">
+          <span
+            aria-live="polite"
+            aria-atomic="true"
+            className="w-6 text-center text-sm font-semibold text-content-primary"
+          >
             {quantity}
           </span>
 
