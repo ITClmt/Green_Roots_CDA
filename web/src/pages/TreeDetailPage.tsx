@@ -16,7 +16,7 @@ export function TreeDetailPage() {
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-[#134d37] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-gray-400 text-sm">Chargement...</p>
+          <p className="text-gray-500 text-sm">Chargement...</p>
         </div>
       </div>
     );
@@ -123,25 +123,25 @@ export function TreeDetailPage() {
               {/* Stats grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
                 <StatCard
-                  icon={<Leaf size={20} className="text-[#134d37]" />}
+                  icon={<Leaf aria-hidden="true" size={20} className="text-[#134d37]" />}
                   label="CO₂ absorbé"
                   value={`~${tree.co2} kg/an`}
                   bg="bg-green-50"
                 />
                 <StatCard
-                  icon={<Wind size={20} className="text-blue-500" />}
+                  icon={<Wind aria-hidden="true" size={20} className="text-blue-500" />}
                   label="O₂ produit"
                   value={`${tree.oxygen} kg/an`}
                   bg="bg-blue-50"
                 />
                 <StatCard
-                  icon={<MapPin size={20} className="text-amber-500" />}
+                  icon={<MapPin aria-hidden="true" size={20} className="text-amber-500" />}
                   label="Région"
                   value={tree.location ?? "—"}
                   bg="bg-amber-50"
                 />
                 <StatCard
-                  icon={<Package size={20} className="text-purple-500" />}
+                  icon={<Package aria-hidden="true" size={20} className="text-purple-500" />}
                   label="En stock"
                   value={`${tree.stock} unités`}
                   bg="bg-purple-50"
@@ -157,7 +157,7 @@ export function TreeDetailPage() {
                     {price.toFixed(2)} €
                   </span>
                 </div>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-500">
                   {tree.stock > 0
                     ? `${tree.stock} exemplaires disponibles`
                     : "Rupture de stock"}
@@ -220,7 +220,7 @@ function StatCard({
   return (
     <div className={`${bg} rounded-2xl p-4 flex flex-col gap-2`}>
       {icon}
-      <p className="text-[10px] uppercase tracking-wide text-gray-400 font-medium">
+      <p className="text-xs uppercase tracking-wide text-gray-500 font-medium">
         {label}
       </p>
       <p className="text-sm font-bold text-[#1a2f24]">{value}</p>

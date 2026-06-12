@@ -3,19 +3,19 @@ import { CommitmentCard } from './CommitmentCard';
 
 const cards = [
   {
-    icon: <Globe className="w-6 h-6" />,
+    icon: <Globe aria-hidden="true" className="w-6 h-6" />,
     title: 'Impact Local',
     description: 'Nous travaillons directement avec les communautés locales pour assurer un impact socio-économique positif durable.',
     variant: 'light' as const,
   },
   {
-    icon: <Eye className="w-6 h-6" />,
+    icon: <Eye aria-hidden="true" className="w-6 h-6" />,
     title: 'Transparence Totale',
     description: 'Suivez chaque arbre planté avec des coordonnées GPS précises et des mises à jour photographiques annuelles.',
     variant: 'light' as const,
   },
   {
-    icon: <TreePine className="w-6 h-6" />,
+    icon: <TreePine aria-hidden="true" className="w-6 h-6" />,
     title: 'Biodiversité',
     description: "Au-delà de la plantation, nous restaurons des écosystèmes complets pour protéger la faune et la flore locales.",
     variant: 'dark' as const,

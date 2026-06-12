@@ -25,11 +25,12 @@ export function SpeciesCard({ id, country, name, desc, image }: SpeciesCardProps
         />
       </div>
       <div className="p-6">
-        <p className="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wider">{country}</p>
+        <p className="text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">{country}</p>
         <h3 className="text-xl font-bold text-[#1a2f24] mb-2">{name}</h3>
         <p className="text-sm text-gray-500 mb-6 line-clamp-2">{desc}</p>
         <button
           onClick={() => navigate(`/catalog/${id}`)}
+          aria-label={`Voir les détails de ${name}`}
           className="w-full py-3 bg-[#f3f4f1] hover:bg-[#e9ebe5] cursor-pointer text-[#1a2f24] font-medium rounded-xl transition-colors"
         >
           Voir les détails

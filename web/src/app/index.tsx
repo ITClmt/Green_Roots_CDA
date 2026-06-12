@@ -10,6 +10,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { AdminTreesPage } from "../pages/AdminTreesPage";
 import { TreeDetailPage } from "../pages/TreeDetailPage";
 import { ScrollToTop } from "../components/shared/ScrollToTop";
+import { RouteAnnouncer } from "../components/shared/RouteAnnouncer";
 import { NotFoundPage } from "../pages/NotFoundPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { OrderConfirmationPage } from "../pages/OrderConfirmationPage";
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <RouteAnnouncer />
       <Routes>
         <Route element={<MainLayout />}>
           <Route index element={<HomePage />} />

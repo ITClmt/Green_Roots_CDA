@@ -45,7 +45,7 @@ export function TreeRow({ tree, isEditing, onEdit, onDelete }: TreeRowProps) {
         <button
           onClick={() => onEdit(tree)}
           className="p-2 text-content-secondary hover:text-primary hover:bg-surface-primary rounded-lg transition-colors"
-          aria-label="Modifier"
+          aria-label={`Modifier ${tree.name}`}
         >
           <Pencil size={14} />
         </button>
@@ -60,7 +60,7 @@ export function TreeRow({ tree, isEditing, onEdit, onDelete }: TreeRowProps) {
               onDelete(tree.id);
           }}
           className="p-2 text-content-secondary hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-          aria-label="Supprimer"
+          aria-label={`Supprimer ${tree.name}`}
         >
           <Trash2 size={14} />
         </button>
