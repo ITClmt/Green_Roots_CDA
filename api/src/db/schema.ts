@@ -65,6 +65,7 @@ export const orders = pgTable("orders", {
     .references(() => users.id, { onDelete: "cascade" }),
   totalAmount: decimal("total_amount").notNull(),
   status: status("status").notNull().default("PENDING"),
+  stripeSessionId: text("stripe_session_id").unique(),
   ...timestamps,
 });
 

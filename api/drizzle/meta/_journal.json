@@ -43,6 +43,13 @@
       "when": 1779351872886,
       "tag": "0005_omniscient_the_leader",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1781210450795,
+      "tag": "0006_flowery_omega_sentinel",
+      "breakpoints": true
     }
   ]
 }

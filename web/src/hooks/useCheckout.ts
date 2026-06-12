@@ -1,36 +1,32 @@
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
-import { createOrder } from "../api/orders";
+import { createCheckoutSession } from "../api/checkout";
 import { useAuth } from "../features/auth/AuthContext";
 import { useCart } from "../features/cart/CartContext";
 import { withRefresh } from "../utils/withRefresh";
-import type { CartItem } from "../types/cart";
 
-export interface OrderConfirmationState {
-  orderId: string;
-  items: CartItem[];
-  totalPrice: number;
-}
 
 export function useCheckout() {
   const { accessToken, refreshSession } = useAuth();
-  const { items, totalPrice, clearCart } = useCart();
-  const navigate = useNavigate();
+  const { items } = useCart();
 
   return useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       if (!accessToken) throw new Error("Non authentifié");
-      const orderItems = items.map((i) => ({ tree_id: i.tree.id, quantity: i.quantity }));
-      return withRefresh((token) => createOrder(orderItems, token), accessToken, refreshSession);
+      const orderItems = items.map((i) => ({
+        tree_id: i.tree.id,
+        quantity: i.quantity,
+      }));
+      const res = await withRefresh(
+        (token) => createCheckoutSession(orderItems, token),
+        accessToken,
+        refreshSession,
+      );
+      const url = res.data?.url;
+      if (!url) throw new Error("URL de paiement indisponible");
+      return url;
     },
-    onSuccess: async (result) => {
-      const state: OrderConfirmationState = {
-        orderId: result.data?.id ?? "",
-        items,
-        totalPrice,
-      };
-      clearCart();
-      await navigate("/order-confirmation", { state });
+    onSuccess: (url) => {
+      window.location.href = url;
     },
   });
 }

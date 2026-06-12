@@ -1,8 +1,5 @@
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Lock, ShieldCheck } from "lucide-react";
+import { CreditCard, Loader2, Lock, ShieldCheck } from "lucide-react";
 import { formatPrice } from "../../utils/formatters";
-import { checkoutSchema, type CheckoutFormValues } from "../../lib/schemas/checkoutSchema";
 
 interface CheckoutFormProps {
   totalPrice: number;
@@ -36,15 +33,6 @@ export function CheckoutForm({
   error,
   onSubmit,
 }: CheckoutFormProps) {
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CheckoutFormValues>({
-    resolver: zodResolver(checkoutSchema),
-  });
-
   return (
     <div className="bg-white rounded-[var(--radius-card)] p-6 shadow-sm flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -163,6 +151,8 @@ export function CheckoutForm({
             {error.message}
           </p>
         )}
+      </button>
+
 
         <button
           type="submit"

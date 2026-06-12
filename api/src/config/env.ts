@@ -11,6 +11,9 @@ const schema = z.object({
   JWT_SECRET: z.string().min(32),
   CORS_ORIGIN: z.string().default("*"),
   LOG_LEVEL: z.enum(["debug", "info", "warn", "error", "silent"]).default("info"),
+  STRIPE_SECRET_KEY: z.string().min(1),
+  STRIPE_WEBHOOK_SECRET: z.string().min(1),
+  WEB_URL: z.url().default("http://localhost:5173"),
 });
 
 const parsed = schema.safeParse(Bun.env);
