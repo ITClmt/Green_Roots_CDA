@@ -72,12 +72,6 @@ export function CheckoutForm({
           </>
         )}
       </button>
-
-      <p className="text-xs text-content-secondary text-center">
-        Paiement en mode test — carte&nbsp;
-        <span className="font-mono">4242 4242 4242 4242</span>, une date future
-        et n'importe quel CVC.
-      </p>
     </div>
   );
 }
