@@ -14,6 +14,13 @@ export interface UserProfile {
   treesPlanted: number;
 }
 
+export interface BadgeData {
+  id: string;
+  name: string;
+  description: string;
+  variant: "green" | "brown";
+}
+
 export interface OrderData {
   id: string;
   name: string;
