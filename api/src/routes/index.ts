@@ -1,5 +1,6 @@
 import Elysia from "elysia";
 import { authController } from "@/controllers/auth.controller";
+import { badgeController } from "@/controllers/badge.controller";
 import { usersController } from "@/controllers/users.controller";
 import { treesController } from "@/controllers/trees.controller";
 import { healthRoute } from "./health";
@@ -14,4 +15,5 @@ export const routes = new Elysia()
   .use(treesController)
   .use(orderController)
   .use(checkoutController)
-  .use(paymentController);
+  .use(paymentController)
+  .use(badgeController);

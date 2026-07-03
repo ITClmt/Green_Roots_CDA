@@ -1,11 +1,16 @@
-import type { BadgeData } from "../../types/profile";
+import { useQuery } from "@tanstack/react-query";
+import { getUserBadges } from "../../api/badges";
 import { BadgeCard } from "./BadgeCard";
 
-interface BadgeSectionProps {
-  badges: BadgeData[];
-}
+export function BadgeSection({ accessToken }: { accessToken: string }) {
+  const { data: badgesResponse } = useQuery({
+    queryKey: ["userBadges", accessToken],
+    queryFn: () => getUserBadges(accessToken!),
+    enabled: !!accessToken,
+  });
 
-export function BadgeSection({ badges }: BadgeSectionProps) {
+  const badges = (badgesResponse?.data ?? []).filter((b) => b.unlocked);
+
   return (
     <section>
       <h2 className="text-xl font-bold text-content-primary mb-4">Badges</h2>

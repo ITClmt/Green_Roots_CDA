@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import { Link } from "react-router";
 import { getUserOrders } from "../api/orders";
+import { BadgeSection } from "../components/profile/BadgeSection";
 import { ImpactCard } from "../components/profile/ImpactCard";
 import { OrderHistory } from "../components/profile/OrderHistory";
 import { useAuth } from "../features/auth/AuthContext";
@@ -45,8 +46,7 @@ export function ProfilePage() {
             {user.firstName} {user.lastName}
           </h1>
           <ImpactCard treesPlanted={treesPlanted} isLoading={isLoading} />
-          {/* TODO: Add badges when feature is ready, remove this comment then */}
-          {/* <BadgeSection badges={BADGES} /> */}
+          <BadgeSection accessToken={accessToken!} />
         </div>
 
         {/* Right column: order history + CTA */}

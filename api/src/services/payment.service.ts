@@ -2,6 +2,7 @@ import type Stripe from "stripe";
 import { env } from "@/config/env";
 import { CURRENCY, stripe } from "@/lib/stripe";
 import type { CheckoutDto } from "@/models/order";
+import { checkAndUnlockBadges } from "@/services/badge.service";
 import { orderService } from "@/services/order.service";
 import { InternalError } from "@/utils/errors";
 import { logger } from "@/utils/logger";
@@ -56,9 +57,11 @@ export const paymentService = {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const orderId = session.metadata?.orderId;
+        const userId = session.client_reference_id;
         if (orderId && session.payment_status === "paid") {
           await orderService.markOrderPaid(orderId);
           logger.info({ orderId }, "Order paid via Stripe");
+          if (userId) await checkAndUnlockBadges(userId);
         }
         break;
       }

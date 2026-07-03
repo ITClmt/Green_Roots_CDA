@@ -6,6 +6,7 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
   uuid,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "./helpers";
@@ -81,3 +82,38 @@ export const orderItems = pgTable("order_items", {
   unitPrice: decimal("unit_price").notNull(),
   ...timestamps,
 });
+
+export const badgeVariantEnum = pgEnum("badge_variant", ["green", "brown"]);
+export const badgeRequirementTypeEnum = pgEnum("badge_requirement_type", [
+  "trees_planted",
+  "co2_total",
+  "species_count",
+]);
+
+export const badges = pgTable("badges", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  key: text("key").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  variant: badgeVariantEnum("variant").notNull(),
+  requirementType: badgeRequirementTypeEnum("requirement_type").notNull(),
+  requirementValue: integer("requirement_value").notNull(),
+  ...timestamps,
+});
+
+export const userBadges = pgTable(
+  "user_badges",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    badgeId: uuid("badge_id")
+      .notNull()
+      .references(() => badges.id, { onDelete: "cascade" }),
+    unlockedAt: timestamp("unlocked_at", { mode: "date", withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [unique().on(t.userId, t.badgeId)],
+);

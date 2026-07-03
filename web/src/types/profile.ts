@@ -16,9 +16,12 @@ export interface UserProfile {
 
 export interface BadgeData {
   id: string;
+  key: string;
   name: string;
   description: string;
   variant: "green" | "brown";
+  unlocked: boolean;
+  unlockedAt: string | null;
 }
 
 export interface OrderData {

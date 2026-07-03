@@ -1,5 +1,5 @@
 import { db } from "./client";
-import { trees } from "./schema";
+import { badges, trees } from "./schema";
 
 const treesData = [
   {
@@ -169,10 +169,98 @@ const treesData = [
   },
 ];
 
+const badgesData = [
+  {
+    key: "trees_1",
+    name: "Premier Bourgeon",
+    description: "Vous avez planté votre premier arbre.",
+    variant: "green" as const,
+    requirementType: "trees_planted" as const,
+    requirementValue: 1,
+  },
+  {
+    key: "trees_5",
+    name: "Petit Jardinier",
+    description: "5 arbres plantés, la forêt commence à pousser.",
+    variant: "green" as const,
+    requirementType: "trees_planted" as const,
+    requirementValue: 5,
+  },
+  {
+    key: "trees_10",
+    name: "Ami de la Forêt",
+    description: "10 arbres plantés, vous faites la différence.",
+    variant: "green" as const,
+    requirementType: "trees_planted" as const,
+    requirementValue: 10,
+  },
+  {
+    key: "trees_25",
+    name: "Gardien des Arbres",
+    description: "25 arbres plantés, un engagement sérieux.",
+    variant: "brown" as const,
+    requirementType: "trees_planted" as const,
+    requirementValue: 25,
+  },
+  {
+    key: "trees_50",
+    name: "Défenseur de la Nature",
+    description: "50 arbres plantés, la nature vous le rendra.",
+    variant: "brown" as const,
+    requirementType: "trees_planted" as const,
+    requirementValue: 50,
+  },
+  {
+    key: "trees_100",
+    name: "Légende Verte",
+    description: "100 arbres plantés, un véritable héros du reboisement.",
+    variant: "green" as const,
+    requirementType: "trees_planted" as const,
+    requirementValue: 100,
+  },
+  {
+    key: "co2_100",
+    name: "Souffleur Propre",
+    description: "100 kg de CO₂ compensés grâce à vos plantations.",
+    variant: "green" as const,
+    requirementType: "co2_total" as const,
+    requirementValue: 100,
+  },
+  {
+    key: "co2_500",
+    name: "Champion Climatique",
+    description: "500 kg de CO₂ compensés, un impact réel sur le climat.",
+    variant: "brown" as const,
+    requirementType: "co2_total" as const,
+    requirementValue: 500,
+  },
+  {
+    key: "species_3",
+    name: "Ami de la Biodiversité",
+    description: "3 espèces différentes plantées.",
+    variant: "green" as const,
+    requirementType: "species_count" as const,
+    requirementValue: 3,
+  },
+  {
+    key: "species_5",
+    name: "Collectionneur",
+    description: "5 espèces différentes plantées, vive la diversité.",
+    variant: "brown" as const,
+    requirementType: "species_count" as const,
+    requirementValue: 5,
+  },
+];
+
 async function seed() {
   await db.delete(trees);
   await db.insert(trees).values(treesData);
   console.log(`✅ Inserted ${treesData.length} trees!`);
+
+  await db.delete(badges);
+  await db.insert(badges).values(badgesData);
+  console.log(`✅ Inserted ${badgesData.length} badges!`);
+
   process.exit(0);
 }
 
