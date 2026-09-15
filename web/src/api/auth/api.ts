@@ -1,8 +1,14 @@
 import type { User } from "../../types/profile";
 import { API_BASE_URL } from "../../utils/constant";
 
+/**
+ * Le refresh token n'apparaît plus dans les réponses : il est déposé par
+ * l'API dans un cookie httpOnly, inaccessible au JavaScript de la page.
+ * Le front et l'API partageant la même origine, le navigateur joint ce
+ * cookie automatiquement aux appels de cette section.
+ */
 interface AuthResponse {
-  data: { user: User; accessToken: string; refreshToken: string };
+  data: { user: User; accessToken: string };
 }
 
 function parseError(json: Record<string, unknown>): string {
@@ -25,6 +31,7 @@ export async function login(
 ): Promise<AuthResponse> {
   const res = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
+    credentials: "same-origin",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
@@ -41,6 +48,7 @@ export async function register(
 ): Promise<AuthResponse> {
   const res = await fetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
+    credentials: "same-origin",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password, firstName, lastName }),
   });
@@ -49,27 +57,20 @@ export async function register(
   return json;
 }
 
-export async function refresh(refreshToken: string): Promise<AuthResponse> {
+export async function refresh(): Promise<AuthResponse> {
   const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refreshToken }),
+    credentials: "same-origin",
   });
   const json = await res.json();
   if (!res.ok) throw new Error(parseError(json));
   return json;
 }
 
-export async function logout(
-  accessToken: string,
-  refreshToken: string,
-): Promise<void> {
+export async function logout(accessToken: string): Promise<void> {
   await fetch(`${API_BASE_URL}/auth/logout`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({ refreshToken }),
+    credentials: "same-origin",
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
 }

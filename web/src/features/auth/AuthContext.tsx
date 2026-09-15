@@ -3,8 +3,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as authApi from "../../api/auth/api";
 import { type User } from "../../types/profile";
 
-const REFRESH_KEY = "refreshToken";
-
+/**
+ * La session ne laisse aucune trace exploitable dans le navigateur : le
+ * refresh token vit dans un cookie httpOnly géré par l'API, et le jeton
+ * d'accès reste en mémoire. Un script injecté dans la page ne peut donc
+ * voler ni l'un ni l'autre de façon durable. Au chargement, un appel de
+ * rafraîchissement suffit à restaurer la session si le cookie est valide.
+ */
 interface AuthContextValue {
   user: User | null;
   accessToken: string | null;
@@ -27,40 +32,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  function setSession(u: User, token: string, refreshToken: string) {
+  function setSession(u: User, token: string) {
     setUser(u);
     setAccessToken(token);
-    localStorage.setItem(REFRESH_KEY, refreshToken);
   }
 
   function clearSession() {
     setUser(null);
     setAccessToken(null);
-    localStorage.removeItem(REFRESH_KEY);
   }
 
   async function refreshSession(): Promise<string> {
-    const stored = localStorage.getItem(REFRESH_KEY);
-    if (!stored) throw new Error("No refresh token");
-    const res = await authApi.refresh(stored);
-    setSession(res.data.user, res.data.accessToken, res.data.refreshToken);
+    const res = await authApi.refresh();
+    setSession(res.data.user, res.data.accessToken);
     return res.data.accessToken;
   }
 
   useEffect(() => {
     (async () => {
-      const stored = localStorage.getItem(REFRESH_KEY);
-      if (stored) {
-        try {
-          const res = await authApi.refresh(stored);
-          setSession(
-            res.data.user,
-            res.data.accessToken,
-            res.data.refreshToken,
-          );
-        } catch {
-          clearSession();
-        }
+      try {
+        // Le cookie decide : s'il est absent ou expire, l'API repond 401.
+        await refreshSession();
+      } catch {
+        clearSession();
       }
       setIsLoading(false);
     })();
@@ -68,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function login(email: string, password: string) {
     const res = await authApi.login(email, password);
-    setSession(res.data.user, res.data.accessToken, res.data.refreshToken);
+    setSession(res.data.user, res.data.accessToken);
   }
 
   async function register(
@@ -78,13 +72,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     lastName: string,
   ) {
     const res = await authApi.register(email, password, firstName, lastName);
-    setSession(res.data.user, res.data.accessToken, res.data.refreshToken);
+    setSession(res.data.user, res.data.accessToken);
   }
 
   async function logout() {
-    const stored = localStorage.getItem(REFRESH_KEY);
-    if (accessToken && stored) {
-      await authApi.logout(accessToken, stored).catch(() => {});
+    if (accessToken) {
+      // L'API revoque le jeton en base et expire le cookie.
+      await authApi.logout(accessToken).catch(() => {});
     }
     clearSession();
   }

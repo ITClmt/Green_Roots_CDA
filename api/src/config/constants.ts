@@ -8,6 +8,9 @@ export const API_PREFIX = "/api";
 export const API_VERSION = "v1";
 export const API_BASE = `${API_PREFIX}/${API_VERSION}`;
 
+/** Nom du cookie httpOnly qui porte le refresh token. */
+export const REFRESH_COOKIE = "refresh_token";
+
 export const ARGON2_OPTIONS = {
   algorithm: "argon2id",
   memoryCost: 19456,
