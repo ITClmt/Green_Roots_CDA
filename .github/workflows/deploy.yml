@@ -45,8 +45,8 @@ jobs:
             ${{ env.REGISTRY }}/itclmt/projet-green-roots-web:latest
             ${{ env.REGISTRY }}/itclmt/projet-green-roots-web:${{ github.sha }}
 
-      - name: Trigger Portainer redeploy
+      - name: Trigger Dokploy redeploy
         env:
-          PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
-        if: env.PORTAINER_WEBHOOK_URL != ''
-        run: curl -fsS -X POST "$PORTAINER_WEBHOOK_URL"
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
+        if: env.DOKPLOY_WEBHOOK_URL != ''
+        run: curl -fsS -X POST "$DOKPLOY_WEBHOOK_URL"
