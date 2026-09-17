@@ -30,8 +30,8 @@ jobs:
           file: ./api/Dockerfile.prod
           push: true
           tags: |
-            ${{ env.REGISTRY }}/ITClmt/projet-green-roots-api:latest
-            ${{ env.REGISTRY }}/ITClmt/projet-green-roots-api:${{ github.sha }}
+            ${{ env.REGISTRY }}/itclmt/projet-green-roots-api:latest
+            ${{ env.REGISTRY }}/itclmt/projet-green-roots-api:${{ github.sha }}
 
       - name: Build and push Web
         uses: docker/build-push-action@v6
@@ -42,8 +42,8 @@ jobs:
           build-args: |
             VITE_API_URL=/api
           tags: |
-            ${{ env.REGISTRY }}/ITClmt/projet-green-roots-web:latest
-            ${{ env.REGISTRY }}/ITClmt/projet-green-roots-web:${{ github.sha }}
+            ${{ env.REGISTRY }}/itclmt/projet-green-roots-web:latest
+            ${{ env.REGISTRY }}/itclmt/projet-green-roots-web:${{ github.sha }}
 
       - name: Trigger Portainer redeploy
         env:

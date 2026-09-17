@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
 
   api:
-    image: ${API_IMAGE:-ghcr.io/ITClmt/projet-green-roots-api:latest}
+    image: ${API_IMAGE:-ghcr.io/itclmt/projet-green-roots-api:latest}
     pull_policy: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -53,7 +53,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: ${WEB_IMAGE:-ghcr.io/ITClmt/projet-green-roots-web:latest}
+    image: ${WEB_IMAGE:-ghcr.io/itclmt/projet-green-roots-web:latest}
     pull_policy: always
     depends_on:
       - api
