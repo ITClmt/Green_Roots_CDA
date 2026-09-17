@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
   api:
-    image: ${API_IMAGE:-ghcr.io/ryzenixx/projet-green-roots-api:latest}
+    image: ${API_IMAGE:-ghcr.io/ITClmt/projet-green-roots-api:latest}
     pull_policy: always
     environment:
       <<: *api-env
@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
 
   web:
-    image: ${WEB_IMAGE:-ghcr.io/ryzenixx/projet-green-roots-web:latest}
+    image: ${WEB_IMAGE:-ghcr.io/ITClmt/projet-green-roots-web:latest}
     pull_policy: always
     depends_on:
       - api

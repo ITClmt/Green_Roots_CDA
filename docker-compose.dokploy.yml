@@ -1,0 +1,74 @@
+# Composition de production déployée par Dokploy.
+#
+# Différences avec docker-compose.prod.yml :
+#   - postgres ne publie plus le port 5432 sur l'hôte ;
+#   - web n'est plus publié non plus, c'est Traefik qui l'expose ;
+#   - web rejoint le réseau externe dokploy-network pour que Traefik le voie ;
+#   - les variables Stripe et WEB_URL, absentes de l'ancienne composition,
+#     sont transmises à l'API (sans elles, la validation d'environnement
+#     arrête le conteneur au démarrage).
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - internal
+    restart: unless-stopped
+
+  api:
+    image: ${API_IMAGE:-ghcr.io/ITClmt/projet-green-roots-api:latest}
+    pull_policy: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB}
+      NODE_ENV: production
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${WEB_URL}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      WEB_URL: ${WEB_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "3000"
+    networks:
+      - internal
+    restart: unless-stopped
+
+  web:
+    image: ${WEB_IMAGE:-ghcr.io/ITClmt/projet-green-roots-web:latest}
+    pull_policy: always
+    depends_on:
+      - api
+    expose:
+      - "80"
+    networks:
+      - internal
+      - dokploy-network
+    restart: unless-stopped
+
+networks:
+  internal:
+    driver: bridge
+  dokploy-network:
+    external: true
+
+volumes:
+  pg_data:
