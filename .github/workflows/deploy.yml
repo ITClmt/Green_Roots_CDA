@@ -2,7 +2,9 @@ name: Build and push images
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 permissions:
   contents: read
@@ -12,7 +14,68 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  quality:
+    name: Qualité de code et tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: greenroots_test
+        ports:
+          - 5432:5432
+        # Le job attend que la base réponde avant de démarrer les étapes.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-retries 5
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: greenroots_test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: API - installation
+        working-directory: ./api
+        run: bun install --frozen-lockfile
+
+      - name: API - analyse statique
+        working-directory: ./api
+        run: bun run lint
+
+      - name: API - schéma sur la base de test
+        working-directory: ./api
+        run: bun run db:push
+
+      - name: API - tests unitaires, intégration et sécurité
+        working-directory: ./api
+        run: bun test
+
+      - name: Web - installation
+        working-directory: ./web
+        run: bun install --frozen-lockfile
+
+      - name: Web - analyse statique
+        working-directory: ./web
+        run: bun run lint
+
+      - name: Web - build de production
+        working-directory: ./web
+        env:
+          VITE_API_URL: /api
+        run: bun run build
+
   build-and-push:
+    needs: quality
+    # Publication uniquement sur main, et seulement si la qualité passe.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
