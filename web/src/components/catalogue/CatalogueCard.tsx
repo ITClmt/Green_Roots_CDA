@@ -47,6 +47,8 @@ export function CatalogueCard({ tree, originalTree, onDetails }: CatalogueCardPr
         <img
           src={tree.image}
           alt={tree.name}
+          loading="lazy"
+          decoding="async"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               "https://placehold.co/400x300/e8f5e9/134d37?text=" +

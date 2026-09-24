@@ -21,6 +21,8 @@ export function TreeRow({ tree, isEditing, onEdit, onDelete }: TreeRowProps) {
           <img
             src={tree.imageUrl}
             alt={tree.name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         ) : (

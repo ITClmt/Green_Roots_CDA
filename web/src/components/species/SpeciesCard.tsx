@@ -17,6 +17,8 @@ export function SpeciesCard({ id, country, name, desc, image }: SpeciesCardProps
         <img
           src={image}
           alt={name}
+          loading="lazy"
+          decoding="async"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
               'https://placehold.co/600x400/e8f5e9/134d37?text=' + encodeURIComponent(name);
