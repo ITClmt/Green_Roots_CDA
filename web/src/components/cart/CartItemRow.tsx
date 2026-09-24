@@ -17,6 +17,8 @@ export function CartItemRow({ item }: CartItemRowProps) {
       <img
         src={tree.imageUrl ?? `https://placehold.co/80x80/e8f5e9/134d37?text=${encodeURIComponent(tree.name)}`}
         alt={tree.name}
+        loading="lazy"
+        decoding="async"
         className="w-20 h-20 object-cover rounded-xl shrink-0"
       />
 
